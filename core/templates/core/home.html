@@ -1,3 +1,4 @@
+<!--core\templates\core\home.html-->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,61 +6,174 @@
 
 {% block content %}
 
-    <!-- Hero Section -->
-    <section class="hero"> {# UI Change: Nueva clase 'hero' para la sección principal #}
-        <div class="hero-carousel"> {# UI Change: Contenedor para el carrusel #}
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    {% for item in carousel_items %}
-                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-                    {% endfor %}
-                </ol>
-                <div class="carousel-inner">
-                    {% for item in carousel_items %}
-                        {# UI Change: carousel-item toma la background-image de item.image_url #}
-                        {# Si hay video, el video se posiciona encima. Si no, solo se usa la imagen de fondo. #}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}" {% if item.image_url %}style="background-image: url({{ item.image_url }});"{% endif %}>
-                            {% if item.video_url %}
-                                <video class="d-block w-100" autoplay loop muted>
-                                    <source src="{{ item.video_url }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            {% endif %}
-                            <div class="hero-content"> {# UI Change: Contenido centrado sobre el carrusel #}
-                                <h1>Tu casa, tu lugar, nuestro compromiso.</h1>
-                                <p>Construyendo sueños con calidad y cercanía desde hace 22 años.</p>
-                                <div class="hero-ctas"> {# UI Change: Contenedor para los botones #}
-                                    <a href="{% url 'projects:project_list' %}" class="btn-primary-lework">Ver Proyectos</a> {# UI Change: Usar nueva clase de botón #}
-                                    <a href="{% url 'core:contact' %}" class="btn-outline-lework">Solicitar Presupuesto</a> {# UI Change: Usar nueva clase de botón #}
-                                </div>
-                           </div>
-                       </div>
-                    {% endfor %}
+    <!-- Hero Section: Carrusel de bienvenida con contenido dinámico/estático -->
+    <!-- Contenedor principal del carrusel: Ajusta la altura, asegura que los hijos absolutos se posicionen correctamente -->
+    <section class="relative w-full overflow-hidden h-[70vh] md:h-screen flex items-center justify-center">
+        <!-- Contenedor de las diapositivas del carrusel -->
+        <div id="hero-carousel" class="absolute inset-0 w-full h-full">
+            {% for item in carousel_items %}
+                <!-- Cada diapositiva del carrusel -->
+                <!-- Por defecto opaca y z-0, solo la 'active' será visible y z-10 -->
+                <div class="carousel-item absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out {% if forloop.first %}active opacity-100 z-10{% else %}z-0{% endif %}"
+                     data-index="{{ forloop.counter0 }}">
+                    
+                    {% if item.video_url %}
+                        <!-- Video de fondo (oculta la imagen si el video está presente) -->
+                        <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+                            <source src="{{ item.video_url }}" type="video/mp4">
+                            Tu navegador no soporta el tag de video.
+                        </video>
+                    {% elif item.image_url %}
+                        <!-- Imagen de fondo (si no hay video) -->
+                        <img src="{{ item.image_url }}" alt="{{ item.caption|default:'Imagen de fondo de LE WORK Constructora' }}" class="w-full h-full object-cover">
+                    {% endif %}
+
+                    <!-- Capa de superposición para mejorar la legibilidad del texto -->
+                    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+                    <!-- Contenido del héroe: Siempre visible sobre la imagen/video y la capa -->
+                    <div class="hero-content absolute inset-0 flex flex-col items-center justify-center text-white p-4 md:p-8 text-center z-20">
+                        <h1 class="text-3xl md:text-5xl lg:text-6xl font-oswald font-bold leading-tight mb-4 drop-shadow-lg">Tu casa, tu lugar, nuestro compromiso.</h1>
+                        <p class="text-lg md:text-xl lg:text-2xl font-light mb-8 drop-shadow-md">Construyendo sueños con calidad y cercanía desde hace 22 años.</p>
+                        <div class="hero-ctas flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
+                            <!-- Botones CTA con estilos de Tailwind y efectos hover -->
+                            <a href="{% url 'projects:project_list' %}" class="inline-block py-3 px-6 bg-primary-500 text-white font-bold rounded-lg shadow-md hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105">Ver Proyectos</a>
+                            <a href="{% url 'core:contact' %}" class="inline-block py-3 px-6 border-2 border-white text-white font-bold rounded-lg shadow-md hover:bg-white hover:text-primary-600 transition-all duration-300 transform hover:scale-105">Solicitar Presupuesto</a>
+                        </div>
+                    </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+            {% endfor %}
         </div>
-        {# UI Change: El icono de WhatsApp ya no necesita estar aquí, está en base.html #}
+
+        <!-- Indicadores del Carrusel -->
+        <ol class="carousel-indicators absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
+            {% for item in carousel_items %}
+                <li class="w-3 h-3 bg-white rounded-full cursor-pointer transition-all duration-300 {% if forloop.first %}active scale-125 bg-primary-500{% endif %}"
+                    data-slide-to="{{ forloop.counter0 }}" aria-label="Slide {{ forloop.counter }}"></li>
+            {% endfor %}
+        </ol>
+
+        <!-- Controles de Navegación del Carrusel (Prev/Next) -->
+        <a class="carousel-control-prev absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white text-3xl p-4 bg-black/30 hover:bg-black/50 rounded-full transition-colors duration-300 z-30 cursor-pointer" role="button" aria-label="Anterior">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white text-3xl p-4 bg-black/30 hover:bg-black/50 rounded-full transition-colors duration-300 z-30 cursor-pointer" role="button" aria-label="Siguiente">
+            <i class="fas fa-chevron-right"></i>
+        </a>
     </section>
 
-    <!-- Rest of the content -->
+    <!-- Incluye las secciones modulares restantes de la página de inicio -->
     {% include 'core/home_sections.html' %}
 
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-    $('.carousel').carousel({
-        interval: 5000, // Time in milliseconds between slides
-        pause: "hover" // Pause on hover
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const carouselItems = document.querySelectorAll('#hero-carousel .carousel-item');
+        const carouselIndicators = document.querySelectorAll('.carousel-indicators li');
+        const prevButton = document.querySelector('.carousel-control-prev');
+        const nextButton = document.querySelector('.carousel-control-next');
+        let currentIndex = 0;
+        let intervalTime = 5000; // Tiempo en milisegundos entre diapositivas
+        let carouselInterval;
 
+        // Función para mostrar una diapositiva específica
+        function showSlide(index) {
+            // Asegurarse de que el índice esté dentro de los límites del array
+            if (index >= carouselItems.length) {
+                index = 0; // Volver al inicio si se pasa del final
+            } else if (index < 0) {
+                index = carouselItems.length - 1; // Ir al final si se pasa del inicio
+            }
+
+            // Ocultar la diapositiva actual y su indicador
+            carouselItems[currentIndex].classList.remove('opacity-100', 'z-10');
+            carouselItems[currentIndex].classList.add('opacity-0', 'z-0'); // Baja el z-index para que la nueva diapositiva se muestre encima
+            carouselIndicators[currentIndex].classList.remove('active', 'scale-125', 'bg-primary-500');
+            carouselIndicators[currentIndex].classList.add('bg-white'); // Vuelve el color del indicador a blanco
+
+            // Actualizar el índice al nuevo slide
+            currentIndex = index;
+
+            // Mostrar la nueva diapositiva y su indicador
+            carouselItems[currentIndex].classList.remove('opacity-0', 'z-0');
+            carouselItems[currentIndex].classList.add('opacity-100', 'z-10'); // Sube el z-index para que se muestre encima
+            carouselIndicators[currentIndex].classList.add('active', 'scale-125', 'bg-primary-500');
+            carouselIndicators[currentIndex].classList.remove('bg-white'); // Cambia el color del indicador a primary-500
+
+            // Pausar cualquier video que no sea el actual y reproducir el actual
+            carouselItems.forEach((item, idx) => {
+                const video = item.querySelector('video');
+                if (video) {
+                    if (idx === currentIndex) {
+                        // Intentar reproducir el video, capturando posibles errores (ej. autoplay bloqueado)
+                        video.play().catch(e => console.log("Video autoplay blocked, user interaction might be needed:", e));
+                    } else {
+                        // Pausar y resetear otros videos
+                        video.pause();
+                        video.currentTime = 0; 
+                    }
+                }
+            });
+        }
+
+        // Funciones para navegar al siguiente/anterior slide
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        // Funciones para controlar la reproducción automática del carrusel
+        function startCarousel() {
+            carouselInterval = setInterval(nextSlide, intervalTime);
+        }
+
+        function pauseCarousel() {
+            clearInterval(carouselInterval);
+        }
+
+        // --- Event Listeners ---
+
+        // Navegación con los botones Anterior/Siguiente
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamiento predeterminado del enlace
+                pauseCarousel(); // Pausar para que el usuario pueda interactuar
+                prevSlide(); // Cambiar al slide anterior
+                startCarousel(); // Reiniciar el carrusel después de la interacción manual
+            });
+
+            nextButton.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamiento predeterminado del enlace
+                pauseCarousel(); // Pausar
+                nextSlide(); // Cambiar al slide siguiente
+                startCarousel(); // Reiniciar
+            });
+        }
+
+        // Navegación con los indicadores de puntos
+        carouselIndicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                pauseCarousel(); // Pausar
+                showSlide(index); // Ir al slide correspondiente al indicador
+                startCarousel(); // Reiniciar
+            });
+        });
+
+        // Pausar el carrusel al pasar el ratón por encima (comportamiento similar a Bootstrap)
+        const heroSection = document.querySelector('section.relative.w-full.overflow-hidden'); // Selector más robusto para la sección principal
+        if (heroSection) {
+            heroSection.addEventListener('mouseenter', pauseCarousel);
+            heroSection.addEventListener('mouseleave', startCarousel);
+        }
+
+        // Iniciar el carrusel al cargar la página
+        showSlide(currentIndex); // Asegurar que el primer slide se muestre correctamente al inicio
+        startCarousel(); // Empezar la reproducción automática
+    });
 </script>
 {% endblock %}

@@ -4,78 +4,107 @@
 
 {% block content %}
 
-    <section class="hero-section contact-hero">
-        <div class="container hero-content">
-            <h1>¿Hablemos de tu Proyecto?</h1>
+    <!-- Hero Section para la Página de Contacto -->
+    <section class="w-full h-64 md:h-80 flex items-center justify-center bg-brand-dark text-white shadow-xl"> {# Fondo oscuro para impacto, altura responsiva #}
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight drop-shadow-md">¿Hablemos de tu Proyecto?</h1> {# Título grande y audaz #}
         </div>
     </section>
 
-    <section class="contact-form-section section-spacing">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2 class="section-title text-center">Formulario de Contacto</h2>
-                    <form method="post">
+    <!-- Sección del Formulario de Contacto e Información -->
+    <section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Padding generoso, fondo gris azulado #}
+        <div class="container mx-auto px-4 lg:px-8"> {# Contenedor centrado con padding horizontal #}
+            <div class="flex flex-col md:flex-row gap-12 lg:gap-16"> {# Flexbox para layout responsivo, buen espacio entre columnas #}
+                <!-- Columna del Formulario de Contacto -->
+                <div class="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-xl shadow-xl"> {# Fondo blanco, padding generoso, redondeado y sombra #}
+                    <h2 class="text-3xl md:text-4xl font-oswald font-bold text-brand-dark text-center mb-8">Formulario de Contacto</h2>
+                    <form method="post" class="space-y-6"> {# Espacio entre elementos del formulario #}
                         {% csrf_token %}
-                        {{ form.non_field_errors }}
+                        {% if form.non_field_errors %}
+                            <div class="bg-primary-100 border border-primary-500 text-primary-700 px-4 py-3 rounded-md mb-4" role="alert">
+                                <strong class="font-bold">¡Ups!</strong>
+                                <span class="block sm:inline">{{ form.non_field_errors }}</span>
+                            </div>
+                        {% endif %}
                         {% for field in form %}
                             <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field|add_class:"form-control" }} {# Esto ahora funcionará #}
-                                {{ field.errors }}
+                                <label for="{{ field.id_for_label }}" class="block text-lg font-medium text-brand-dark mb-2">{{ field.label_tag }}</label>
+                                {% if field.field.widget.input_type == 'textarea' %}
+                                    {{ field|add_class:"block w-full px-4 py-3 border border-brand-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-brand-dark bg-white shadow-sm placeholder-brand-gray/70 min-h-[120px]" }} {# Estilo para textarea con altura mínima #}
+                                {% else %}
+                                    {{ field|add_class:"block w-full px-4 py-3 border border-brand-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-brand-dark bg-white shadow-sm placeholder-brand-gray/70" }} {# Estilo para inputs de texto #}
+                                {% endif %}
+                                {% if field.errors %}
+                                    <p class="text-primary-600 text-sm mt-1">{{ field.errors|join:", " }}</p> {# Muestra errores del campo #}
+                                {% endif %}
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn-primary-lework">Enviar Mensaje</button>
+                        <button type="submit" class="inline-flex items-center justify-center w-full py-3.5 px-7 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300">
+                            Enviar Mensaje <i class="fas fa-paper-plane ml-2.5"></i> {# Icono de enviar #}
+                        </button>
                     </form>
                 </div>
-                <div class="col-md-6 contact-info mt-4 mt-md-0">
-                    <h2 class="section-title text-center">Información de Contacto</h2>
-                    {% if contact_info %}
-                        <p>
-                            <i class="fas fa-phone"></i> <a href="tel:{{ contact_info.phone_number }}">{{ contact_info.phone_number }}</a><br> (También WhatsApp)
-                        </p>
-                        <p>
-                            <i class="fas fa-envelope"></i> <a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a>
-                        </p>
-                        <p>
-                            <i class="fab fa-instagram"></i> <a href="{{ contact_info.instagram }}" target="_blank">Constructora Le Work</a>
-                        </p>
-                        {% if contact_info.address %}
-                            <p>
-                                <i class="fas fa-map-marker-alt"></i> {{ contact_info.address }}
+
+                <!-- Columna de Información de Contacto y Mapa -->
+                <div class="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-xl shadow-xl"> {# Fondo blanco, padding generoso, redondeado y sombra #}
+                    <h2 class="text-3xl md:text-4xl font-oswald font-bold text-brand-dark text-center mb-8">Información de Contacto</h2>
+                    <div class="text-lg text-brand-dark space-y-4"> {# Espaciado entre elementos de contacto #}
+                        {% if contact_info %}
+                            <p class="flex items-center">
+                                <i class="fas fa-phone text-primary-500 text-xl mr-3"></i> <a href="tel:{{ contact_info.phone_number }}" class="hover:text-primary-600 transition-colors duration-300">{{ contact_info.phone_number }}</a><br>
+                                <span class="text-brand-gray text-base ml-2">(También WhatsApp)</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-envelope text-primary-500 text-xl mr-3"></i> <a href="mailto:{{ contact_info.email }}" class="hover:text-primary-600 transition-colors duration-300">{{ contact_info.email }}</a>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fab fa-instagram text-purple-600 text-xl mr-3"></i> <a href="{{ contact_info.instagram }}" target="_blank" class="hover:text-primary-600 transition-colors duration-300">@constructoralework</a>
+                            </p>
+                            {% if contact_info.address %}
+                                <p class="flex items-start">
+                                    <i class="fas fa-map-marker-alt text-primary-500 text-xl mr-3 mt-1"></i> <span class="block">{{ contact_info.address }}</span>
+                                </p>
+                            {% endif %}
+                            {% if contact_info.schedule %}
+                                <p class="flex items-center">
+                                    <i class="fas fa-clock text-primary-500 text-xl mr-3"></i> {{ contact_info.schedule }}
+                                </p>
+                            {% endif %}
+                        {% else %}
+                            <p class="flex items-center">
+                                <i class="fas fa-phone text-primary-500 text-xl mr-3"></i> <a href="tel:+5491126370364" class="hover:text-primary-600 transition-colors duration-300">+54 9 11 2637-0364</a><br>
+                                <span class="text-brand-gray text-base ml-2">(También WhatsApp)</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-envelope text-primary-500 text-xl mr-3"></i> <a href="mailto:constructora.lework@hotmail.com" class="hover:text-primary-600 transition-colors duration-300">constructora.lework@hotmail.com</a>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fab fa-instagram text-purple-600 text-xl mr-3"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank" class="hover:text-primary-600 transition-colors duration-300">@constructoralework</a>
                             </p>
                         {% endif %}
-                        {% if contact_info.schedule %}
-                            <p>
-                                <i class="fas fa-clock"></i> {{ contact_info.schedule }}
-                            </p>
-                        {% endif %}
-                    {% else %}
-                        <p>
-                            <i class="fas fa-phone"></i> <a href="tel:+5491126370364">+54 9 11 2637-0364</a><br> (También WhatsApp)
-                        </p>
-                        <p>
-                            <i class="fas fa-envelope"></i> <a href="mailto:constructora.lework@hotmail.com">constructora.lework@hotmail.com</a>
-                        </p>
-                        <p>
-                            <i class="fab fa-instagram"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank">Constructora Le Work</a>
-                        </p>
-                    {% endif %}
+                    </div>
 
-                    <div id="map"></div>
+                    <div id="map" class="w-full h-72 bg-brand-light-blue-gray rounded-lg shadow-md mt-8 overflow-hidden"></div> {# Altura y estilo para el mapa #}
 
-                    <p class="text-center mt-4">Estamos listos para escuchar tus ideas y transformar tus sueños en realidad. Nos pondremos en contacto a la brevedad.</p>
+                    <p class="text-center text-brand-gray text-base mt-6">Estamos listos para escuchar tus ideas y transformar tus sueños en realidad. Nos pondremos en contacto a la brevedad.</p>
 
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Script de Google Maps (Mantener como está, pero recuerda reemplazar 'YOUR_GOOGLE_MAPS_API_KEY') -->
     <script>
         function initMap() {
             const map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: {% if contact_info.latitude %}{{ contact_info.latitude }}{% else %}-34.603722{% endif %}, lng: {% if contact_info.longitude %}{{ contact_info.longitude }}{% else %}-58.381592{% endif %} },  // Buenos Aires (adjust as needed)
+                center: { lat: {% if contact_info.latitude %}{{ contact_info.latitude }}{% else %}-34.603722{% endif %}, lng: {% if contact_info.longitude %}{{ contact_info.longitude }}{% else %}-58.381592{% endif %} },
                 zoom: 14,
+                // Puedes añadir más opciones de estilo para el mapa si quieres, por ejemplo:
+                // styles: [
+                //     { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+                //     { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+                //     { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+                // ]
             });
 
             {% if contact_info.latitude and contact_info.longitude %}

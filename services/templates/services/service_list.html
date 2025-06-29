@@ -1,46 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Servicios | LE WORK Constructora{% endblock %}
+
 {% block content %}
 
-    {# UI Change: Clase para hero de Servicios #}
-    <section class="hero-section services-hero">
-        <div class="hero-content">
-            <h1>Lo que Construimos para Ti</h1>
-            <p>Descubre la gama completa de servicios que ofrecemos en LE WORK Constructora.</p>
+<!-- Hero Section para la Página de Servicios -->
+<section class="w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white shadow-xl"> {# Fondo oscuro para impacto, altura responsiva #}
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 drop-shadow-md">Lo que Construimos para Ti</h1>
+        <p class="text-lg md:text-xl font-light drop-shadow-sm max-w-2xl mx-auto">Descubre la gama completa de servicios especializados que ofrecemos en LE WORK Constructora para hacer realidad tus proyectos.</p> {# Subtítulo descriptivo #}
+    </div>
+</section>
+
+<!-- Sección Principal de Lista de Servicios -->
+<section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
+    <div class="container mx-auto px-4 lg:px-8">
+        <!-- Opciones de Filtro -->
+        <div class="filter-options flex flex-wrap justify-center gap-4 mb-12 p-4 bg-white rounded-xl shadow-lg"> {# Contenedor de filtros con fondo, redondeado y sombra #}
+            <a href="{% url 'services:service_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                {% if not selected_category %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                focus:outline-none focus:ring-2 focus:ring-primary-300">
+                Todos
+            </a>
+            {% for category in categories %}
+                <a href="{% url 'services:service_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                    {% if selected_category == category.name %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                    focus:outline-none focus:ring-2 focus:ring-primary-300">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
         </div>
-    </section>
 
-    {# UI Change: Clase para la sección de lista de servicios #}
-    <section class="services-list section-spacing">
-        <div class="container">
-            <div class="filter-options"> {# UI Change: Contenedor para los filtros #}
-                {# UI Change: Clase filter-button para los enlaces/botones de filtro #}
-                <a href="{% url 'services:service_list' %}" class="filter-button {% if not selected_category %}active{% endif %}">Todos</a>
-                {% for category in categories %}
-                    <a href="{% url 'services:service_list' %}?category={{ category.name }}" class="filter-button {% if selected_category == category.name %}active{% endif %}">{{ category.name }}</a>
-                {% endfor %}
-            </div>
-
-            <div class="service-grid"> {# UI Change: Clase para el grid de servicios #}
-                {% for service in services %}
-                    <div class="service-card"> {# UI Change: Clase para cada tarjeta de servicio #}
+        <!-- Cuadrícula de Servicios -->
+        <div class="service-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center"> {# Grid responsivo #}
+            {% for service in services %}
+                <div class="group w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"> {# Card de servicio con hover effect #}
+                    <a href="{% url 'services:service_detail' service.slug %}" aria-label="Ver detalles del servicio: {{ service.title }}">
                         {% if service.image %}
-                            <img src="{{ service.image.url }}" alt="{{ service.title }}">
+                            <img src="{{ service.image.url }}" alt="{{ service.title }} - Imagen del servicio" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"> {# Imagen con altura fija y zoom en hover #}
                         {% else %}
-                            {# Placeholder de imagen si no hay ninguna #}
-                            <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}">
+                            <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105">
                         {% endif %}
-                        <h2>{{ service.title }}</h2>
-                        <p>{{ service.short_description }}</p>
-                        <a href="{% url 'services:service_detail' service.slug %}" class="btn-primary-lework">Ver Detalles</a> {# UI Change: Usar nueva clase de botón #}
-                    </div>
-                {% empty %}
-                    <p class="no-services-message">No se encontraron servicios en esta categoría.</p> {# UI Change: Centrar mensaje #}
-                {% endfor %}
-            </div>
-
+                        <div class="p-6"> {# Padding para el contenido #}
+                            <h2 class="text-xl font-oswald font-semibold text-brand-dark mb-2">{{ service.title }}</h2>
+                            <p class="text-brand-gray text-sm">{{ service.short_description }}</p>
+                            <div class="mt-4 text-right"> {# Alinea el botón a la derecha #}
+                                <span class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition-transform duration-300 group-hover:translate-x-1"> {# Animación de "mover" el enlace en hover de la card #}
+                                    Ver Detalles <i class="fas fa-arrow-right ml-2.5 text-base"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"> {# Mensaje de no servicios #}
+                    <p class="text-xl text-brand-dark font-semibold mb-3">No se encontraron servicios en esta categoría.</p>
+                    <p class="text-lg text-brand-gray">Prueba a seleccionar otra categoría o explora todas las opciones disponibles.</p>
+                </div>
+            {% endfor %}
         </div>
-    </section>
+
+    </div>
+</section>
 
 {% endblock content %}

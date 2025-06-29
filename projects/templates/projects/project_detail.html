@@ -1,42 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}{{ project.title }} | Proyectos LE WORK Constructora{% endblock %}
+
 {% block content %}
 
-<section class="project-detail section-spacing"> {# UI Change: Clase principal para el detalle de proyecto #}
-    <div class="container">
-        <h1 class="project-title">{{ project.title }}</h1> {# UI Change: Clase para el título #}
-
-        <div class="project-gallery"> {# UI Change: Contenedor para la galería de imágenes #}
-            {% for image in project.images.all %}
-                <img src="{{ image.image.url }}" alt="{{ project.title }} - Image {{ forloop.counter }}" class="project-image"> {# UI Change: Clase para las imágenes #}
-            {% empty %}
-                <p>No hay imágenes disponibles para este proyecto.</p>
-                <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available" class="project-image">
-            {% endfor %}
+    <!-- Hero Section para el Título del Proyecto -->
+    <section class="w-full py-20 md:py-24 bg-primary-700 text-white shadow-xl"> {# Fondo primario oscuro, padding generoso #}
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-oswald font-extrabold leading-tight tracking-tight drop-shadow-md">
+                {{ project.title }}
+            </h1> {# Título grande y audaz #}
         </div>
+    </section>
 
-        <div class="project-info"> {# UI Change: Contenedor para la información del proyecto #}
-            <p class="project-description">{{ project.detailed_description|linebreaksbr }}</p> {# UI Change: Clase para la descripción detallada #}
-
-            <div class="project-details"> {# UI Change: Contenedor para los detalles clave #}
-                <p><strong>Categorías:</strong> {% for category in project.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-                {% if project.service_type %}<p><strong>Tipo de Servicio:</strong> {{ project.service_type }}</p>{% endif %}
-                {% if project.duration %}<p><strong>Duración del Proyecto:</strong> {{ project.duration }}</p>{% endif %}
-                {% if project.location %}<p><strong>Ubicación:</strong> {{ project.location }}</p>{% endif %}
-                {% if project.client %}<p><strong>Cliente:</strong> {{ project.client }}</p>{% endif %}
+    <!-- Sección Principal de Contenido del Proyecto -->
+    <section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
+        <div class="container mx-auto px-4 lg:px-8">
+            <!-- Galería de Imágenes -->
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12"> {# Contenedor de la galería en una "card" #}
+                <h2 class="text-2xl md:text-3xl font-oswald font-bold text-brand-dark text-center mb-8">Galería de Imágenes</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 justify-items-center"> {# Grid responsivo para imágenes #}
+                    {% for image in project.images.all %}
+                        <div class="group w-full rounded-lg overflow-hidden shadow-md transform transition-transform duration-300 hover:scale-103 hover:shadow-lg hover:shadow-primary-300/50">
+                            <img src="{{ image.image.url }}" alt="{{ project.title }} - Imagen {{ forloop.counter }}" class="w-full h-60 md:h-72 object-cover object-center"> {# Imágenes de tamaño consistente, cubriendo el espacio #}
+                        </div>
+                    {% empty %}
+                        <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-lg shadow-inner">
+                            <p class="text-lg text-brand-dark font-medium mb-2">No hay imágenes disponibles para este proyecto.</p>
+                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available - Placeholder" class="w-full max-w-sm mx-auto h-48 object-cover rounded-lg">
+                        </div>
+                    {% endfor %}
                 </div>
+            </div>
 
+            <!-- Información y Detalles del Proyecto -->
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12"> {# Contenedor de información en una "card" #}
+                <h2 class="text-2xl md:text-3xl font-oswald font-bold text-brand-dark text-center mb-8">Descripción del Proyecto</h2>
+                <p class="text-lg text-brand-dark leading-relaxed mb-10 text-center md:text-left">
+                    {% if project.detailed_description %}{{ project.detailed_description|linebreaksbr }}{% else %}No hay descripción detallada para este proyecto.{% endif %}
+                </p>
+
+                <div class="project-details grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-lg text-brand-dark"> {# Grid responsivo para los detalles clave #}
+                    {% if project.categories.all %}
+                        <p>
+                            <strong class="font-bold text-primary-700 block mb-1">Categorías:</strong>
+                            <span class="text-brand-dark">{% for category in project.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                        </p>
+                    {% endif %}
+                    {% if project.service_type %}
+                        <p>
+                            <strong class="font-bold text-primary-700 block mb-1">Tipo de Servicio:</strong>
+                            <span class="text-brand-dark">{{ project.service_type }}</span>
+                        </p>
+                    {% endif %}
+                    {% if project.duration %}
+                        <p>
+                            <strong class="font-bold text-primary-700 block mb-1">Duración del Proyecto:</strong>
+                            <span class="text-brand-dark">{{ project.duration }}</span>
+                        </p>
+                    {% endif %}
+                    {% if project.location %}
+                        <p>
+                            <strong class="font-bold text-primary-700 block mb-1">Ubicación:</strong>
+                            <span class="text-brand-dark">{{ project.location }}</span>
+                        </p>
+                    {% endif %}
+                    {% if project.client %}
+                        <p>
+                            <strong class="font-bold text-primary-700 block mb-1">Cliente:</strong>
+                            <span class="text-brand-dark">{{ project.client }}</span>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Testimonio del Cliente (si existe) -->
             {% if project.client_testimonial_quote %}
-                <div class="project-testimonial"> {# UI Change: Nueva clase para el testimonio #}
-                    <blockquote>"{{ project.client_testimonial_quote|linebreaksbr }}"</blockquote>
-                    <p class="testimonial-author">— {% if project.client_testimonial_author %}{{ project.client_testimonial_author }}{% else %}Cliente Anónimo{% endif %}</p>
+                <div class="bg-brand-light-pink p-8 md:p-10 rounded-xl shadow-lg border-l-4 border-primary-500 relative overflow-hidden"> {# Fondo rosa pálido, borde izquierdo, sombra #}
+                    <div class="absolute top-4 left-4 text-primary-300 text-6xl opacity-30 z-0">
+                        <i class="fas fa-quote-left"></i> {# Icono de cita decorativo #}
+                    </div>
+                    <blockquote class="text-xl md:text-2xl text-brand-dark italic leading-relaxed mb-6 relative z-10">
+                        "{{ project.client_testimonial_quote|linebreaksbr }}"
+                    </blockquote>
+                    <p class="testimonial-author text-primary-700 font-semibold text-lg text-right relative z-10">
+                        — {% if project.client_testimonial_author %}{{ project.client_testimonial_author }}{% else %}Cliente Anónimo{% endif %}
+                    </p>
                 </div>
             {% endif %}
 
-           <a href="{% url 'projects:project_list' %}" class="btn-primary-lework">Ver otros proyectos</a> {# UI Change: Usar nueva clase de botón #}
+            <!-- Botón para ver otros proyectos -->
+            <div class="text-center mt-12">
+                <a href="{% url 'projects:project_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300">
+                    Ver otros proyectos <i class="fas fa-long-arrow-alt-right ml-3"></i>
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 {% endblock %}

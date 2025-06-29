@@ -5,99 +5,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LE WORK Constructora{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Open Sans"', 'sans-serif'],
+                        oswald: ['"Oswald"', 'sans-serif'],
+                    },
+colors: {
+    primary: {
+        50: '#FCEAEA',
+        100: '#F8D5D5',
+        200: '#F1AAAA',
+        300: '#EA7F7F',
+        400: '#E35353',
+        500: '#E53935', // Rojo principal del logo
+        600: '#CF322F',
+        700: '#B72B29',
+        800: '#9F2423',
+        900: '#871E1D',
+        950: '#5C1414',
+    },
+    'brand-dark': '#000000', // Negro del texto "L" y "LE"
+    'brand-gray': '#A0A0A0', // Gris medio (edificios)
+    'brand-light-pink': '#D3D3D3', // Gris claro (también sirve como fondo)
+    'brand-muted-red': '#CA4C4C', // Alternativa de rojo más suave
+    'brand-light-blue-gray': '#CCD4D4', // Mantener si es útil para otros UI
+
+    accent: {
+        'whatsapp': '#25D366',
+        'whatsapp-dark': '#1DA851',
+    }
+},
+
+                }
+            }
+        }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: theme('colors.brand-dark'); /* Color de texto base ahora es tu negro */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Oswald', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'core:home' %}">
-                    <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Constructora Logo">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            {# UI Fix: Usando request.resolver_match.url_name para 'home' y 'contact' #}
-                            {# UI Fix: Usando request.resolver_match.app_name para el resto de apps #}
-                            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.app_name == 'about' %}active{% endif %}" href="{% url 'about:about' %}">Quiénes Somos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.app_name == 'services' %}active{% endif %}" href="{% url 'services:service_list' %}">Servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}" href="{% url 'projects:project_list' %}">Proyectos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'core:contact' %}">Contacto</a>
-                        </li>
-                    </ul>
-                </div>
+<body class="bg-brand-light-blue-gray antialiased"> {# Usamos el gris azulado claro como fondo principal #}
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a class="flex-shrink-0" href="{% url 'core:home' %}">
+                <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Constructora Logo" class="h-12 w-auto">
+            </a>
+
+            <button id="navbar-toggle" class="md:hidden p-2 rounded-md text-brand-dark hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-300" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+
+            <div id="navbar-menu" class="hidden md:flex md:items-center md:w-auto w-full absolute md:static top-full left-0 bg-white md:bg-transparent shadow-md md:shadow-none p-4 md:p-0 transition-all duration-300 ease-in-out">
+                <ul class="flex flex-col md:flex-row md:ml-auto space-y-3 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                    <li class="nav-item">
+                        <a class="nav-link block py-2 px-4 rounded-md text-brand-dark hover:text-primary-600 hover:bg-brand-light-pink font-medium transition-all duration-300 ease-in-out
+                            {% if request.resolver_match.url_name == 'home' %}text-primary-700 font-semibold border-b-2 border-primary-700 bg-brand-light-pink{% endif %}"
+                           href="{% url 'core:home' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block py-2 px-4 rounded-md text-brand-dark hover:text-primary-600 hover:bg-brand-light-pink font-medium transition-all duration-300 ease-in-out
+                            {% if request.resolver_match.app_name == 'about' %}text-primary-700 font-semibold border-b-2 border-primary-700 bg-brand-light-pink{% endif %}"
+                           href="{% url 'about:about' %}">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block py-2 px-4 rounded-md text-brand-dark hover:text-primary-600 hover:bg-brand-light-pink font-medium transition-all duration-300 ease-in-out
+                            {% if request.resolver_match.app_name == 'services' %}text-primary-700 font-semibold border-b-2 border-primary-700 bg-brand-light-pink{% endif %}"
+                           href="{% url 'services:service_list' %}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block py-2 px-4 rounded-md text-brand-dark hover:text-primary-600 hover:bg-brand-light-pink font-medium transition-all duration-300 ease-in-out
+                            {% if request.resolver_match.app_name == 'projects' %}text-primary-700 font-semibold border-b-2 border-primary-700 bg-brand-light-pink{% endif %}"
+                           href="{% url 'projects:project_list' %}">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block py-2 px-4 rounded-md text-brand-dark hover:text-primary-600 hover:bg-brand-light-pink font-medium transition-all duration-300 ease-in-out
+                            {% if request.resolver_match.url_name == 'contact' %}text-primary-700 font-semibold border-b-2 border-primary-700 bg-brand-light-pink{% endif %}"
+                           href="{% url 'core:contact' %}">Contacto</a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
 
-    <main>
+    <main class="min-h-screen">
         {% block content %}{% endblock %}
     </main>
 
-    <a href="https://wa.me/+5491126370364" class="whatsapp-icon" target="_blank" aria-label="Contactar por WhatsApp">
+    <a href="https://wa.me/+5491126370364" class="whatsapp-icon fixed bottom-6 right-6 z-40 bg-accent-whatsapp text-white rounded-full p-4 shadow-lg text-2xl flex items-center justify-center hover:bg-accent-whatsapp-dark transition-colors duration-300" target="_blank" aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="row text-center text-md-left">
-                <div class="col-md-3 col-sm-6 logo-column">
+    <footer class="bg-brand-dark text-brand-gray py-10"> {# Fondo oscuro y texto gris para el footer #}
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+                <div class="col-span-1 flex justify-center md:justify-start items-center">
                     <a href="{% url 'core:home' %}">
-                        <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Logo">
+                        <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Logo" class="h-20 w-auto">
                     </a>
                 </div>
-                <div class="col-md-6 col-sm-6 navigation-column">
-                    <ul class="footer-nav">
-                        <li><a href="{% url 'core:home' %}">Inicio</a></li>
-                        <li><a href="{% url 'about:about' %}">Quiénes Somos</a></li>
-                        <li><a href="{% url 'services:service_list' %}">Servicios</a></li>
-                        <li><a href="{% url 'projects:project_list' %}">Proyectos</a></li>
-                        <li><a href="{% url 'core:contact' %}">Contacto</a></li>
+
+                <div class="col-span-2">
+                    <ul class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-lg">
+                        <li><a href="{% url 'core:home' %}" class="hover:text-primary-400 transition-colors duration-300">Inicio</a></li>
+                        <li><a href="{% url 'about:about' %}" class="hover:text-primary-400 transition-colors duration-300">Quiénes Somos</a></li>
+                        <li><a href="{% url 'services:service_list' %}" class="hover:text-primary-400 transition-colors duration-300">Servicios</a></li>
+                        <li><a href="{% url 'projects:project_list' %}" class="hover:text-primary-400 transition-colors duration-300">Proyectos</a></li>
+                        <li><a href="{% url 'core:contact' %}" class="hover:text-primary-400 transition-colors duration-300">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 col-12 contact-column">
+
+                <div class="col-span-1">
+                    <h3 class="font-oswald text-xl text-white mb-4">Contacto</h3>
                     {% if contact_info %}
-                        <p><i class="fas fa-phone"></i> <a href="tel:{{ contact_info.phone_number }}">{{ contact_info.phone_number }}</a></p>
-                        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/{{ contact_info.phone_number|cut:' ' }}" target="_blank">{{ contact_info.phone_number }}</a></p>
-                        <p><i class="fas fa-envelope"></i> <a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a></p>
-                        <p><i class="fab fa-instagram"></i> <a href="{{ contact_info.instagram }}" target="_blank">Constructora Le Work</a></p>
+                        <p class="mb-2"><i class="fas fa-phone mr-2 text-primary-400"></i> <a href="tel:{{ contact_info.phone_number }}" class="hover:text-primary-400 transition-colors duration-300">{{ contact_info.phone_number }}</a></p>
+                        <p class="mb-2"><i class="fab fa-whatsapp mr-2 text-accent-whatsapp"></i> <a href="https://wa.me/{{ contact_info.phone_number|cut:' ' }}" target="_blank" class="hover:text-primary-400 transition-colors duration-300">{{ contact_info.phone_number }}</a></p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2 text-primary-400"></i> <a href="mailto:{{ contact_info.email }}" class="hover:text-primary-400 transition-colors duration-300">{{ contact_info.email }}</a></p>
+                        <p class="mb-2"><i class="fab fa-instagram mr-2 text-purple-400"></i> <a href="{{ contact_info.instagram }}" target="_blank" class="hover:text-primary-400 transition-colors duration-300">@constructoralework</a></p>
                         {% if contact_info.address %}
-                            <p><i class="fas fa-map-marker-alt"></i> {{ contact_info.address }}</p>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt mr-2 text-primary-400"></i> {{ contact_info.address }}</p>
                         {% endif %}
                     {% else %}
-                        <p><i class="fas fa-phone"></i> <a href="tel:+5491126370364">+54 9 11 2637-0364</a></p>
-                        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/+5491126370364" target="_blank">+54 9 11 2637-0364</a></p>
-                        <p><i class="fas fa-envelope"></i> <a href="mailto:constructora.lework@hotmail.com">constructora.lework@hotmail.com</a></p>
-                        <p><i class="fab fa-instagram"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank">Constructora Le Work</a></p>
+                        <p class="mb-2"><i class="fas fa-phone mr-2 text-primary-400"></i> <a href="tel:+5491126370364" class="hover:text-primary-400 transition-colors duration-300">+54 9 11 2637-0364</a></p>
+                        <p class="mb-2"><i class="fab fa-whatsapp mr-2 text-accent-whatsapp"></i> <a href="https://wa.me/+5491126370364" target="_blank" class="hover:text-primary-400 transition-colors duration-300">+54 9 11 2637-0364</a></p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2 text-primary-400"></i> <a href="mailto:constructora.lework@hotmail.com" class="hover:text-primary-400 transition-colors duration-300">constructora.lework@hotmail.com</a></p>
+                        <p class="mb-2"><i class="fab fa-instagram mr-2 text-purple-400"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank">@constructoralework</a></p>
                     {% endif %}
-                    <p class="copyright-text">© {% now 'Y' %} LE WORK Constructora. Todos los derechos reservados.</p>
                 </div>
+            </div>
+            <div class="mt-8 pt-4 border-t border-brand-gray text-center text-sm text-brand-gray"> {# Borde del footer ahora usa brand-gray #}
+                <p class="copyright-text">© {% now 'Y' %} LE WORK Constructora. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // UI Fix: El script JS para manejar la clase 'active' es ahora redundante y fue eliminado.
-        // La lógica se maneja de forma más eficiente y robusta directamente en el template de Django.
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const navbarMenu = document.getElementById('navbar-menu');
+
+            if (navbarToggle && navbarMenu) {
+                navbarToggle.addEventListener('click', function() {
+                    navbarMenu.classList.toggle('hidden');
+                    navbarMenu.classList.toggle('absolute');
+                    navbarMenu.classList.toggle('bg-white');
+                    navbarMenu.classList.toggle('shadow-md');
+                    navbarMenu.classList.toggle('p-4');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!navbarMenu.contains(event.target) && !navbarToggle.contains(event.target) && !navbarMenu.classList.contains('hidden')) {
+                        navbarMenu.classList.add('hidden');
+                        navbarMenu.classList.remove('absolute', 'bg-white', 'shadow-md', 'p-4');
+                    }
+                });
+            }
+        });
     </script>
     {% block extra_scripts %}{% endblock %}
 </body>

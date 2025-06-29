@@ -1,66 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Proyectos | LE WORK Constructora{% endblock %}
+
 {% block content %}
 
-{# UI Change: Clase para hero de Proyectos #}
-<section class="hero-section hero-section-projects">
-    <div class="hero-content">
-        <h1>Nuestras Obras Hablan por Nosotros</h1>
-        <p>Explora nuestros proyectos y descubre la calidad y dedicación que ponemos en cada obra.</p>
+<!-- Hero Section para la Página de Proyectos -->
+<section class="w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white shadow-xl"> {# Fondo oscuro para impacto, altura responsiva #}
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 drop-shadow-md">Nuestras Obras Hablan por Nosotros</h1>
+        <p class="text-lg md:text-xl font-light drop-shadow-sm max-w-2xl mx-auto">Explora nuestros proyectos y descubre la calidad, la innovación y la dedicación que ponemos en cada obra que emprendemos.</p> {# Subtítulo descriptivo #}
     </div>
 </section>
 
-{# UI Change: Clase para la sección de proyectos #}
-<section class="projects-section section-spacing">
-    <div class="container">
-        <div class="filter-options"> {# UI Change: Contenedor para los botones de filtro #}
-            {# UI Change: Clase filter-button para los enlaces/botones de filtro #}
-            <a href="{% url 'projects:project_list' %}" class="filter-button {% if not selected_categories %}active{% endif %}">Todos</a>
+<!-- Sección Principal de Proyectos -->
+<section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
+    <div class="container mx-auto px-4 lg:px-8">
+        <!-- Opciones de Filtro -->
+        <div class="filter-options flex flex-wrap justify-center gap-4 mb-12 p-4 bg-white rounded-xl shadow-lg"> {# Contenedor de filtros con fondo, redondeado y sombra #}
+            <a href="{% url 'projects:project_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                {% if not selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                focus:outline-none focus:ring-2 focus:ring-primary-300">
+                Todos
+            </a>
             {% for category in categories %}
-                <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button {% if category.name in selected_categories %}active{% endif %}">{{ category.name }}</a>
+                <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                    {% if category.name in selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                    focus:outline-none focus:ring-2 focus:ring-primary-300">
+                    {{ category.name }}
+                </a>
             {% endfor %}
         </div>
 
-        <div class="project-grid"> {# UI Change: Clase para el grid de proyectos #}
+        <!-- Cuadrícula de Proyectos -->
+        <div class="project-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center"> {# Grid responsivo #}
             {% for project in project_list %}
-            {# UI Change: project-item ya está usada en home, reutilizada aquí. Asegúrate de que las clases se apliquen. #}
-            <div class="project-item" data-categories="{% for category in project.categories.all %}{{ category.name }} {% endfor %}">
-                <a href="{% url 'projects:project_detail' project.slug %}">
+            <div class="group w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"> {# Card de proyecto con hover effect #}
+                <a href="{% url 'projects:project_detail' project.slug %}" aria-label="Ver detalles de {{ project.title }}">
                     {% if project.images.first %} {# Usa la primera imagen como miniatura #}
-                        <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+                        <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen principal" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"> {# Imagen con altura fija y zoom en hover #}
                     {% else %}
-                        {# Placeholder de imagen si no hay ninguna #}
-                        <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}">
+                        <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105">
                     {% endif %}
-                    <div class="project-overlay">
-                        <h3>{{ project.title }}</h3>
-                        <p>{{ project.short_description }}</p>
+                    <div class="p-6"> {# Padding para el contenido #}
+                        <h3 class="text-xl font-oswald font-semibold text-brand-dark mb-2">{{ project.title }}</h3>
+                        <p class="text-brand-gray text-sm">{{ project.short_description }}</p>
                     </div>
                 </a>
             </div>
             {% empty %}
-                <p class="no-projects-message">No se encontraron proyectos en esta categoría.</p>
+                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"> {# Mensaje de no proyectos #}
+                    <p class="text-xl text-brand-dark font-semibold mb-3">No se encontraron proyectos en esta categoría.</p>
+                    <p class="text-lg text-brand-gray">Prueba a seleccionar otra categoría o explora todos nuestros trabajos.</p>
+                </div>
             {% endfor %}
         </div>
 
+        <!-- Paginación -->
         {% if is_paginated %}
-        <div class="pagination"> {# UI Change: Clase para la paginación #}
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">« primera</a>
-                    <a href="?page={{ page_obj.previous_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">anterior</a>
-                {% endif %}
+        <div class="pagination flex justify-center items-center gap-4 mt-16 text-lg"> {# Centrado, con espaciado, margen superior #}
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
+                   « primera
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
+                   anterior
+                </a>
+            {% endif %}
 
-                <span class="current">
-                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
-                </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">siguiente</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">última »</a>
-                {% endif %}
+            <span class="current px-4 py-2 font-semibold text-primary-700 bg-primary-100 rounded-lg shadow-inner"> {# Página actual destacada #}
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
             </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
+                   siguiente
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
+                   última »
+                </a>
+            {% endif %}
         </div>
         {% endif %}
     </div>
