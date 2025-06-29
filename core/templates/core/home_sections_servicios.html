@@ -1,0 +1,35 @@
+<!-- Sección de Servicios Destacados -->
+<section class="py-20 bg-white animate-on-scroll">
+    <div class="container mx-auto px-6 lg:px-8">
+        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-7 leading-tight tracking-tight">Nuestros Servicios Principales</h2>
+        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">Explora las áreas en las que somos expertos y descubre cómo podemos ayudarte a construir tus sueños, desde la concepción hasta la entrega.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+            {% for service_category in featured_services %}
+                <div class="group w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary-300/50 animate-on-scroll">
+                    <div class="p-8 text-center">
+                        {% if service_category.icon %}
+                            <img src="{{ service_category.icon.url }}" alt="Icono de la categoría de servicio: {{ service_category.name }}" class="w-20 h-20 mx-auto mb-5 text-primary-500 transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                        {% else %}
+                            <i class="fas fa-cogs text-6xl text-primary-500 mb-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true"></i>
+                        {% endif %}
+                        <h4 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ service_category.name }}</h4>
+                        <p class="text-neutral-gray text-base mb-6">{{ service_category.description|truncatewords:25 }}</p>
+                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition-transform duration-300 group-hover:translate-x-1" aria-label="Ver todos los servicios de la categoría {{ service_category.name }}">
+                            Ver Servicios <i class="fas fa-long-arrow-alt-right ml-2.5 text-base"></i>
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
+                    <p class="text-xl text-neutral-dark font-semibold mb-3">No hay categorías de servicios destacadas disponibles en este momento.</p>
+                    <p class="text-lg text-neutral-gray">Por favor, inténtelo de nuevo más tarde o póngase en contacto con nosotros.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-16">
+            <a href="{% url 'services:service_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los servicios que LE WORK Constructora ofrece">
+                Ver todos los Servicios <i class="fas fa-long-arrow-alt-right ml-3"></i>
+            </a>
+        </div>
+    </div>
+</section>

@@ -36,136 +36,20 @@
 </style>
 
 <!-- Sección "Quiénes Somos" -->
-<!-- Usando colores semánticos definidos en tailwind.config.js -->
-<section class="py-20 bg-neutral-light animate-on-scroll">
-    <div class="container mx-auto px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-16 md:gap-20">
-            <div class="w-full md:w-7/12 text-center md:text-left">
-                {% if about_us_snippet %}
-                    <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark mb-7 leading-tight tracking-tight">Sobre Nosotros</h2>
-                    <p class="text-xl text-neutral-dark mb-5 leading-relaxed">{{ about_us_snippet.main_content|truncatewords:80|linebreaksbr }}</p>
-                    <p class="text-neutral-gray text-lg mb-10">{{ about_us_snippet.mission|truncatewords:30 }}</p>
-                    <a href="{% url 'about:about' %}" class="inline-flex items-center py-3.5 px-7 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Conoce más sobre LE WORK Constructora en nuestra página completa">
-                        Conoce más sobre nosotros <i class="fas fa-long-arrow-alt-right ml-2.5"></i>
-                    </a>
-                {% else %}
-                    <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark mb-7 leading-tight tracking-tight">Sobre Nosotros</h2>
-                    <p class="text-xl text-neutral-dark mb-5 leading-relaxed">La información "Quiénes Somos" no está disponible. Por favor, añádela en el panel de administración para que aparezca aquí.</p>
-                    <a href="{% url 'about:about' %}" class="inline-flex items-center py-3.5 px-7 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Visitar la página completa de Sobre Nosotros">
-                        Visitar página completa <i class="fas fa-long-arrow-alt-right ml-2.5"></i>
-                    </a>
-                {% endif %}
-            </div>
-            <div class="w-full md:w-5/12 flex justify-center md:justify-end mt-10 md:mt-0">
-                <img src="{% static 'core/img/about_home_placeholder.jpg' %}" alt="Equipo de LE WORK Constructora trabajando en una oficina moderna, simbolizando colaboración y construcción." class="w-full max-w-lg h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:shadow-primary-300/50" loading="lazy">
-            </div>
-        </div>
+    {% include 'core/home_sections_quienes.html' %}
 
-        {% if values %}
-            <h3 class="text-3xl md:text-4xl font-oswald font-bold text-neutral-dark text-center mt-20 mb-12">Nuestros Valores Fundamentales</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
-                {% for value in values|slice:":3" %}
-                    <div class="group w-full max-w-md bg-neutral-pink-light rounded-xl shadow-lg p-8 text-center transform transition-all duration-300 hover:-translate-y-3 hover:shadow-xl hover:shadow-primary-300/50 animate-on-scroll">
-                        {% if value.icon %}
-                            <img src="{{ value.icon.url }}" alt="Icono representativo de nuestro valor: {{ value.name }}" class="w-20 h-20 mx-auto mb-5 text-primary-500 transition-transform duration-300 group-hover:scale-110" loading="lazy">
-                        {% else %}
-                            <i class="fas fa-star text-6xl text-primary-500 mb-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true"></i>
-                        {% endif %}
-                        <h4 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ value.name }}</h4>
-                        <p class="text-neutral-gray text-base">{{ value.description|truncatewords:20 }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="text-center mt-20 p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
-                <h3 class="text-3xl md:text-4xl font-oswald font-bold text-neutral-dark mb-3">Nuestros Valores Fundamentales</h3>
-                <p class="text-xl text-neutral-dark font-semibold mb-3">La información sobre nuestros valores fundamentales no está disponible en este momento.</p>
-                <p class="text-lg text-neutral-gray">Estamos comprometidos con la excelencia y la integridad en cada proyecto.</p>
-            </div>
-        {% endif %}
-    </div>
-</section>
 
 <!-- Sección de Servicios Destacados -->
-<section class="py-20 bg-white animate-on-scroll">
-    <div class="container mx-auto px-6 lg:px-8">
-        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-7 leading-tight tracking-tight">Nuestros Servicios Principales</h2>
-        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">Explora las áreas en las que somos expertos y descubre cómo podemos ayudarte a construir tus sueños, desde la concepción hasta la entrega.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
-            {% for service_category in featured_services %}
-                <div class="group w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary-300/50 animate-on-scroll">
-                    <div class="p-8 text-center">
-                        {% if service_category.icon %}
-                            <img src="{{ service_category.icon.url }}" alt="Icono de la categoría de servicio: {{ service_category.name }}" class="w-20 h-20 mx-auto mb-5 text-primary-500 transition-transform duration-300 group-hover:scale-110" loading="lazy">
-                        {% else %}
-                            <i class="fas fa-cogs text-6xl text-primary-500 mb-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true"></i>
-                        {% endif %}
-                        <h4 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ service_category.name }}</h4>
-                        <p class="text-neutral-gray text-base mb-6">{{ service_category.description|truncatewords:25 }}</p>
-                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition-transform duration-300 group-hover:translate-x-1" aria-label="Ver todos los servicios de la categoría {{ service_category.name }}">
-                            Ver Servicios <i class="fas fa-long-arrow-alt-right ml-2.5 text-base"></i>
-                        </a>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
-                    <p class="text-xl text-neutral-dark font-semibold mb-3">No hay categorías de servicios destacadas disponibles en este momento.</p>
-                    <p class="text-lg text-neutral-gray">Por favor, inténtelo de nuevo más tarde o póngase en contacto con nosotros.</p>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-16">
-            <a href="{% url 'services:service_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los servicios que LE WORK Constructora ofrece">
-                Ver todos los Servicios <i class="fas fa-long-arrow-alt-right ml-3"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    {% include 'core/home_sections_servicios.html' %}
+
 
 <!-- Sección de Proyectos Recientes -->
-<section class="py-20 bg-neutral-pink-light animate-on-scroll">
-    <div class="container mx-auto px-6 lg:px-8">
-        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-7 leading-tight tracking-tight">Proyectos Recientes</h2>
-        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">Un vistazo a nuestras últimas construcciones y remodelaciones, reflejo de nuestra experiencia, dedicación y atención al detalle.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
-            {% for project in featured_projects %}
-                <div class="group w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary-300/50 animate-on-scroll">
-                    <a href="{% url 'projects:project_detail' project.slug %}" aria-label="Ver detalles del proyecto {{ project.title }}">
-                        {% if project.images.first %}
-                            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen de portada del proyecto" class="w-full h-64 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105" loading="lazy">
-                        {% else %}
-                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="Imagen de proyecto no disponible para {{ project.title }}" class="w-full h-64 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105" loading="lazy">
-                        {% endif %}
-                        <div class="p-8">
-                            <h5 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ project.title }}</h5>
-                            <p class="text-neutral-gray text-base">{{ project.short_description|truncatewords:15 }}</p>
-                        </div>
-                    </a>
-                </div>
-            {% empty %}
-                <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
-                    <p class="text-xl text-neutral-dark font-semibold mb-3">Parece que no hay proyectos destacados disponibles en este momento.</p>
-                    <p class="text-lg text-neutral-gray">¡Estamos trabajando en cosas geniales! Vuelva pronto o visite nuestra página de Proyectos para actualizaciones.</p>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-16">
-            <a href="{% url 'projects:project_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los proyectos realizados por LE WORK Constructora">
-                Explorar todos los Proyectos <i class="fas fa-long-arrow-alt-right ml-3"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    {% include 'core/home_sections_proyectos.html' %}
+
 
 <!-- Sección Final CTA -->
-<section class="py-24 bg-neutral-dark text-white text-center animate-on-scroll">
-    <div class="container mx-auto px-6 lg:px-8">
-        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold mb-10 leading-tight tracking-tight">¿Listo para construir tu sueño con LE WORK?</h2>
-        <a href="{% url 'core:contact' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/50" aria-label="Contactar a LE WORK Constructora para iniciar tu proyecto">
-            Contáctanos Ahora <i class="fas fa-phone-alt ml-3"></i>
-        </a>
-    </div>
-</section>
+    {% include 'core/home_sections_final.html' %}
+
 
 <!-- SCRIPT DE ANIMACIÓN SCROLL (Refactorizado para usar la clase 'is-visible') -->
 <script>

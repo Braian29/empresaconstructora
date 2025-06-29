@@ -1,0 +1,52 @@
+{% load static %}
+
+<!-- Sección "Quiénes Somos" -->
+<!-- Usando colores semánticos definidos en tailwind.config.js -->
+<section class="py-20 bg-neutral-light animate-on-scroll">
+    <div class="container mx-auto px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-16 md:gap-20">
+            <div class="w-full md:w-7/12 text-center md:text-left">
+                {% if about_us_snippet %}
+                    <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark mb-7 leading-tight tracking-tight">Sobre Nosotros</h2>
+                    <p class="text-xl text-neutral-dark mb-5 leading-relaxed">{{ about_us_snippet.main_content|truncatewords:80|linebreaksbr }}</p>
+                    <p class="text-neutral-gray text-lg mb-10">{{ about_us_snippet.mission|truncatewords:30 }}</p>
+                    <a href="{% url 'about:about' %}" class="inline-flex items-center py-3.5 px-7 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Conoce más sobre LE WORK Constructora en nuestra página completa">
+                        Conoce más sobre nosotros <i class="fas fa-long-arrow-alt-right ml-2.5"></i>
+                    </a>
+                {% else %}
+                    <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark mb-7 leading-tight tracking-tight">Sobre Nosotros</h2>
+                    <p class="text-xl text-neutral-dark mb-5 leading-relaxed">La información "Quiénes Somos" no está disponible. Por favor, añádela en el panel de administración para que aparezca aquí.</p>
+                    <a href="{% url 'about:about' %}" class="inline-flex items-center py-3.5 px-7 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Visitar la página completa de Sobre Nosotros">
+                        Visitar página completa <i class="fas fa-long-arrow-alt-right ml-2.5"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="w-full md:w-5/12 flex justify-center md:justify-end mt-10 md:mt-0">
+                <img src="{% static 'core/img/about_home_placeholder.jpg' %}" alt="Equipo de LE WORK Constructora trabajando en una oficina moderna, simbolizando colaboración y construcción." class="w-full max-w-lg h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:shadow-primary-300/50" loading="lazy">
+            </div>
+        </div>
+
+        {% if values %}
+            <h3 class="text-3xl md:text-4xl font-oswald font-bold text-neutral-dark text-center mt-20 mb-12">Nuestros Valores Fundamentales</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+                {% for value in values|slice:":3" %}
+                    <div class="group w-full max-w-md bg-neutral-pink-light rounded-xl shadow-lg p-8 text-center transform transition-all duration-300 hover:-translate-y-3 hover:shadow-xl hover:shadow-primary-300/50 animate-on-scroll">
+                        {% if value.icon %}
+                            <img src="{{ value.icon.url }}" alt="Icono representativo de nuestro valor: {{ value.name }}" class="w-20 h-20 mx-auto mb-5 text-primary-500 transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                        {% else %}
+                            <i class="fas fa-star text-6xl text-primary-500 mb-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true"></i>
+                        {% endif %}
+                        <h4 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ value.name }}</h4>
+                        <p class="text-neutral-gray text-base">{{ value.description|truncatewords:20 }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center mt-20 p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
+                <h3 class="text-3xl md:text-4xl font-oswald font-bold text-neutral-dark mb-3">Nuestros Valores Fundamentales</h3>
+                <p class="text-xl text-neutral-dark font-semibold mb-3">La información sobre nuestros valores fundamentales no está disponible en este momento.</p>
+                <p class="text-lg text-neutral-gray">Estamos comprometidos con la excelencia y la integridad en cada proyecto.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
