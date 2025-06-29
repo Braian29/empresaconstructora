@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 
-<section class="service-detail">
+<section class="service-detail section-spacing"> {# UI Change: Clase principal para el detalle de servicio #}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -21,9 +21,9 @@
                 <h2>Proyectos Relacionados</h2>
                 <div class="row">
                     {% for project in related_projects %}
-                        <div class="col-md-4 project-card">
+                        <div class="col-md-4 project-card"> {# UI Change: Clase project-card para cada proyecto relacionado #}
                             <a href="{% url 'projects:project_detail' project.slug %}">
-                                {% if project.main_image %}
+                                {% if project.main_image %} {# Asumiendo que 'main_image' es una buena imagen para la miniatura #}
                                     <img src="{{ project.main_image.image.url }}" alt="{{ project.title }}" class="img-fluid">
                                 {% else %}
                                     {# Placeholder de imagen si no hay ninguna #}
@@ -33,17 +33,17 @@
                             </a>
                         </div>
                     {% empty %}
-                        <p class="no-projects-message">No hay proyectos relacionados con este servicio aún.</p>
+                        <p class="no-projects-message">No hay proyectos relacionados con este servicio aún.</p> {# UI Change: Centrar mensaje #}
                     {% endfor %}
                  </div>
 
-                <a href="{% url 'services:service_list' %}" class="btn btn-primary mt-4">Volver a Servicios</a>
-                <a href="{% url 'core:contact' %}" class="btn btn-secondary mt-4">Solicitar Presupuesto</a>
+                {# UI Change: Usar nuevas clases de botón #}
+                <a href="{% url 'services:service_list' %}" class="btn-primary-lework mt-4">Volver a Servicios</a>
+                <a href="{% url 'core:contact' %}" class="btn-outline-lework mt-4">Solicitar Presupuesto</a>
 
             </div>
         </div>
     </div>
 </section>
-
 
 {% endblock %}

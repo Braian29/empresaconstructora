@@ -1,27 +1,30 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 
-<section class="hero-section-projects">
+{# UI Change: Clase para hero de Proyectos #}
+<section class="hero-section hero-section-projects">
     <div class="hero-content">
         <h1>Nuestras Obras Hablan por Nosotros</h1>
         <p>Explora nuestros proyectos y descubre la calidad y dedicación que ponemos en cada obra.</p>
     </div>
 </section>
 
-
-<section class="projects-section">
+{# UI Change: Clase para la sección de proyectos #}
+<section class="projects-section section-spacing">
     <div class="container">
-        <div class="filter-options">
+        <div class="filter-options"> {# UI Change: Contenedor para los botones de filtro #}
+            {# UI Change: Clase filter-button para los enlaces/botones de filtro #}
             <a href="{% url 'projects:project_list' %}" class="filter-button {% if not selected_categories %}active{% endif %}">Todos</a>
             {% for category in categories %}
                 <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button {% if category.name in selected_categories %}active{% endif %}">{{ category.name }}</a>
             {% endfor %}
         </div>
 
-        <div class="project-grid">
+        <div class="project-grid"> {# UI Change: Clase para el grid de proyectos #}
             {% for project in project_list %}
+            {# UI Change: project-item ya está usada en home, reutilizada aquí. Asegúrate de que las clases se apliquen. #}
             <div class="project-item" data-categories="{% for category in project.categories.all %}{{ category.name }} {% endfor %}">
                 <a href="{% url 'projects:project_detail' project.slug %}">
                     {% if project.images.first %} {# Usa la primera imagen como miniatura #}
@@ -42,7 +45,7 @@
         </div>
 
         {% if is_paginated %}
-        <div class="pagination">
+        <div class="pagination"> {# UI Change: Clase para la paginación #}
             <span class="step-links">
                 {% if page_obj.has_previous %}
                     <a href="?page=1{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">« primera</a>

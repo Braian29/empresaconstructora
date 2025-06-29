@@ -2,37 +2,37 @@
 {% load static %} {# Es crucial cargar el tag static aquí también si se usa dentro #}
 
 <!-- Sección "Quiénes Somos" (Snippet para el Home) -->
-<section class="home-about-us section-spacing">
+<section class="home-about-us section-spacing"> {# UI Change: Clase principal para la sección, y section-spacing para el padding #}
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-7">
                 {% if about_us_snippet %}
-                    <h2 class="section-title">{{ about_us_snippet.title }}</h2>
+                    <h2 class="section-title">Sobre Nosotros</h2> {# UI Change: Clase section-title #}
                     <p class="lead">{{ about_us_snippet.main_content|truncatewords:80|linebreaksbr }}</p>
                     <p>{{ about_us_snippet.mission|truncatewords:30 }}</p> {# Opcional: mostrar misión resumida #}
-                    <a href="{% url 'about:about' %}" class="btn btn-secondary">Conoce más sobre nosotros <i class="fas fa-arrow-right"></i></a>
+                    <a href="{% url 'about:about' %}" class="btn-outline-lework">Conoce más sobre nosotros <i class="fas fa-arrow-right ml-2"></i></a> {# UI Change: Usar nueva clase de botón y añadir icono #}
                 {% else %}
-                    <h2 class="section-title">Sobre Nosotros</h2>
+                    <h2 class="section-title">Sobre Nosotros</h2> {# UI Change: Clase section-title #}
                     <p class="lead">Información "Quiénes Somos" no disponible. Por favor, añádela en el panel de administración para que aparezca aquí.</p>
-                    <a href="{% url 'about:about' %}" class="btn btn-secondary">Visitar página completa <i class="fas fa-arrow-right"></i></a>
+                    <a href="{% url 'about:about' %}" class="btn-outline-lework">Visitar página completa <i class="fas fa-arrow-right ml-2"></i></a> {# UI Change: Usar nueva clase de botón y añadir icono #}
                 {% endif %}
             </div>
-            <div class="col-md-5 text-center">
+            <div class="col-md-5 text-center mt-5 mt-md-0"> {# UI Change: Ajustar margen para móviles #}
                 {# Podrías poner una imagen representativa de la empresa aquí #}
                 <img src="{% static 'core/img/about_home_placeholder.jpg' %}" alt="LE WORK Constructora" class="img-fluid rounded shadow-lg">
             </div>
         </div>
 
         {% if values %}
-            <h3 class="mt-5 text-center">Nuestros Valores Fundamentales</h3>
-            <div class="row justify-content-center values-grid mt-4">
+            <h3 class="section-title mt-5">Nuestros Valores Fundamentales</h3> {# UI Change: Clase section-title y margen superior #}
+            <div class="row justify-content-center values-grid mt-4"> {# UI Change: Nueva clase para el grid de valores #}
                 {% for value in values|slice:":3" %} {# Muestra solo los primeros 3 valores, si hay muchos #}
                     <div class="col-md-4 mb-4">
-                        <div class="value-item text-center p-4 border rounded shadow-sm">
+                        <div class="value-item"> {# UI Change: Nueva clase para cada item de valor #}
                             {% if value.icon %}
-                                <img src="{{ value.icon.url }}" alt="{{ value.name }} Icon" class="value-icon mb-3">
+                                <img src="{{ value.icon.url }}" alt="{{ value.name }} Icon" class="value-icon"> {# UI Change: Nueva clase para la imagen del icono #}
                             {% else %}
-                                <i class="fas fa-star fa-3x mb-3 text-primary"></i> {# Icono genérico #}
+                                <i class="fas fa-star"></i> {# UI Change: Icono genérico Font Awesome #}
                             {% endif %}
                             <h4>{{ value.name }}</h4>
                             <p>{{ value.description|truncatewords:20 }}</p>
@@ -45,22 +45,22 @@
 </section>
 
 <!-- Sección de Servicios Destacados -->
-<section class="home-services bg-light section-spacing">
+<section class="home-services section-spacing"> {# UI Change: Nueva clase para la sección #}
     <div class="container">
-        <h2 class="section-title text-center">Nuestros Servicios Principales</h2>
+        <h2 class="section-title">Nuestros Servicios Principales</h2> {# UI Change: Clase section-title #}
         <p class="text-center lead mb-5">Explora las áreas en las que somos expertos.</p>
-        <div class="row services-grid">
+        <div class="row services-grid"> {# UI Change: Nueva clase para el grid de servicios #}
             {% for service_category in featured_services %} {# La vista pasa ServiceCategory objetos #}
                 <div class="col-md-4 mb-4">
-                    <div class="service-item text-center p-4 border rounded shadow-sm">
+                    <div class="service-item"> {# UI Change: Nueva clase para cada item de servicio #}
                         {% if service_category.icon %}
-                            <img src="{{ service_category.icon.url }}" alt="{{ service_category.name }} Icon" class="service-icon mb-3">
+                            <img src="{{ service_category.icon.url }}" alt="{{ service_category.name }} Icon" class="service-icon"> {# UI Change: Nueva clase para la imagen del icono #}
                         {% else %}
-                            <i class="fas fa-cogs fa-3x mb-3 text-info"></i> {# Icono genérico #}
+                            <i class="fas fa-cogs"></i> {# UI Change: Icono genérico Font Awesome #}
                         {% endif %}
                         <h4>{{ service_category.name }}</h4>
                         <p>{{ service_category.description|truncatewords:25 }}</p>
-                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="btn btn-outline-info btn-sm">Ver Servicios <i class="fas fa-angle-right"></i></a>
+                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="btn-outline-lework btn-sm">Ver Servicios <i class="fas fa-angle-right ml-2"></i></a> {# UI Change: Usar nueva clase de botón #}
                     </div>
                 </div>
             {% empty %}
@@ -70,27 +70,27 @@
             {% endfor %}
         </div>
         <div class="text-center mt-5">
-            <a href="{% url 'services:service_list' %}" class="btn btn-primary">Ver todos los Servicios <i class="fas fa-long-arrow-alt-right"></i></a>
+            <a href="{% url 'services:service_list' %}" class="btn-primary-lework">Ver todos los Servicios <i class="fas fa-long-arrow-alt-right ml-2"></i></a> {# UI Change: Usar nueva clase de botón #}
         </div>
     </div>
 </section>
 
 <!-- Sección de Proyectos Recientes -->
-<section class="home-projects section-spacing">
+<section class="home-projects section-spacing"> {# UI Change: Nueva clase para la sección #}
     <div class="container">
-        <h2 class="section-title text-center">Proyectos Recientes</h2>
+        <h2 class="section-title">Proyectos Recientes</h2> {# UI Change: Clase section-title #}
         <p class="text-center lead mb-5">Un vistazo a nuestras últimas construcciones y remodelaciones.</p>
-        <div class="row projects-grid">
+        <div class="row projects-grid"> {# UI Change: Nueva clase para el grid de proyectos #}
             {% for project in featured_projects %}
                 <div class="col-md-4 mb-4">
-                    <div class="project-item border rounded shadow-sm">
+                    <div class="project-item"> {# UI Change: Nueva clase para cada item de proyecto #}
                         <a href="{% url 'projects:project_detail' project.slug %}">
                             {% if project.images.first %}
                                 <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}" class="img-fluid rounded-top">
                             {% else %}
                                 <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="img-fluid rounded-top">
                             {% endif %}
-                            <div class="p-3">
+                            <div class="p-3"> {# UI Change: Contenedor para el texto del proyecto #}
                                 <h5>{{ project.title }}</h5>
                                 <p class="text-muted">{{ project.short_description|truncatewords:15 }}</p>
                             </div>
@@ -104,32 +104,15 @@
             {% endfor %}
         </div>
         <div class="text-center mt-5">
-            <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Explorar todos los Proyectos <i class="fas fa-long-arrow-alt-right"></i></a>
+            <a href="{% url 'projects:project_list' %}" class="btn-primary-lework">Explorar todos los Proyectos <i class="fas fa-long-arrow-alt-right ml-2"></i></a> {# UI Change: Usar nueva clase de botón #}
         </div>
     </div>
 </section>
 
-<!-- Sección de Testimonios (Opcional si hay testimonios principales, de lo contrario se sacaría) -->
-{# Puedes integrar aquí algunos testimonios principales si AboutUs los tiene destacados #}
-{# Por ejemplo, si pasas `testimonials` en el contexto de home view (actualmente no lo haces) #}
-{% comment %}
-<section class="home-testimonials bg-light section-spacing">
+<!-- Sección Final CTA -->
+<section class="final-cta section-spacing"> {# UI Change: Nueva clase para la sección CTA #}
     <div class="container">
-        <h2 class="section-title text-center">Lo que Nuestros Clientes Dicen</h2>
-        <div class="row justify-content-center">
-            {% for testimonial in main_testimonials_for_home %} {# Necesitarías pasar esta variable desde la vista #}
-                <div class="col-md-6 mb-4">
-                    <div class="testimonial-card p-4 border rounded shadow-sm">
-                        <p class="lead">"{{ testimonial.content|truncatewords:50 }}"</p>
-                        <p class="text-right font-weight-bold">— {{ testimonial.client_name }}</p>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="col-12 text-center">
-                    <p>No hay testimonios para mostrar en la página de inicio.</p>
-                </div>
-            {% endfor %}
-        </div>
+        <h2>¿Listo para construir tu sueño con LE WORK?</h2>
+        <a href="{% url 'core:contact' %}" class="btn-primary-lework">Contáctanos Ahora <i class="fas fa-phone-alt ml-2"></i></a> {# UI Change: Usar nueva clase de botón y añadir icono #}
     </div>
 </section>
-{% endcomment %}

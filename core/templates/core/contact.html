@@ -1,36 +1,35 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %} 
 
 {% block content %}
 
     <section class="hero-section contact-hero">
-        <div class="container">
+        <div class="container hero-content">
             <h1>¿Hablemos de tu Proyecto?</h1>
         </div>
     </section>
 
-
-    <section class="contact-form-section">
+    <section class="contact-form-section section-spacing">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Formulario de Contacto</h2>
+                    <h2 class="section-title text-center">Formulario de Contacto</h2>
                     <form method="post">
                         {% csrf_token %}
                         {{ form.non_field_errors }}
                         {% for field in form %}
                             <div class="form-group">
                                 {{ field.label_tag }}
-                                {{ field }}
+                                {{ field|add_class:"form-control" }} {# Esto ahora funcionará #}
                                 {{ field.errors }}
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                        <button type="submit" class="btn-primary-lework">Enviar Mensaje</button>
                     </form>
                 </div>
-                <div class="col-md-6 contact-info">
-                    <h2>Información de Contacto</h2>
-                    {# Usamos contact_info que viene del context processor #}
+                <div class="col-md-6 contact-info mt-4 mt-md-0">
+                    <h2 class="section-title text-center">Información de Contacto</h2>
                     {% if contact_info %}
                         <p>
                             <i class="fas fa-phone"></i> <a href="tel:{{ contact_info.phone_number }}">{{ contact_info.phone_number }}</a><br> (También WhatsApp)
@@ -52,7 +51,6 @@
                             </p>
                         {% endif %}
                     {% else %}
-                        {# Fallback si no hay información de contacto #}
                         <p>
                             <i class="fas fa-phone"></i> <a href="tel:+5491126370364">+54 9 11 2637-0364</a><br> (También WhatsApp)
                         </p>
@@ -64,9 +62,9 @@
                         </p>
                     {% endif %}
 
-                    <div id="map" style="height: 300px; width: 100%;"></div>
+                    <div id="map"></div>
 
-                    <p>Estamos listos para escuchar tus ideas y transformar tus sueños en realidad. Nos pondremos en contacto a la brevedad.</p>
+                    <p class="text-center mt-4">Estamos listos para escuchar tus ideas y transformar tus sueños en realidad. Nos pondremos en contacto a la brevedad.</p>
 
                 </div>
             </div>
@@ -89,9 +87,8 @@
             {% endif %}
         }
 
-        window.initMap = initMap; // Expose to global scope for Google Maps API callback
+        window.initMap = initMap;
     </script>
-    {# Recuerda reemplazar YOUR_GOOGLE_MAPS_API_KEY con tu clave real #}
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 
 {% endblock %}

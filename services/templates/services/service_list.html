@@ -1,8 +1,9 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 
+    {# UI Change: Clase para hero de Servicios #}
     <section class="hero-section services-hero">
         <div class="hero-content">
             <h1>Lo que Construimos para Ti</h1>
@@ -10,18 +11,20 @@
         </div>
     </section>
 
-    <section class="services-list">
+    {# UI Change: Clase para la sección de lista de servicios #}
+    <section class="services-list section-spacing">
         <div class="container">
-            <div class="filter-options">
+            <div class="filter-options"> {# UI Change: Contenedor para los filtros #}
+                {# UI Change: Clase filter-button para los enlaces/botones de filtro #}
                 <a href="{% url 'services:service_list' %}" class="filter-button {% if not selected_category %}active{% endif %}">Todos</a>
                 {% for category in categories %}
                     <a href="{% url 'services:service_list' %}?category={{ category.name }}" class="filter-button {% if selected_category == category.name %}active{% endif %}">{{ category.name }}</a>
                 {% endfor %}
             </div>
 
-            <div class="service-grid">
+            <div class="service-grid"> {# UI Change: Clase para el grid de servicios #}
                 {% for service in services %}
-                    <div class="service-card">
+                    <div class="service-card"> {# UI Change: Clase para cada tarjeta de servicio #}
                         {% if service.image %}
                             <img src="{{ service.image.url }}" alt="{{ service.title }}">
                         {% else %}
@@ -30,10 +33,10 @@
                         {% endif %}
                         <h2>{{ service.title }}</h2>
                         <p>{{ service.short_description }}</p>
-                        <a href="{% url 'services:service_detail' service.slug %}" class="btn btn-primary">Ver Detalles</a>
+                        <a href="{% url 'services:service_detail' service.slug %}" class="btn-primary-lework">Ver Detalles</a> {# UI Change: Usar nueva clase de botón #}
                     </div>
                 {% empty %}
-                    <p class="no-services-message">No se encontraron servicios en esta categoría.</p>
+                    <p class="no-services-message">No se encontraron servicios en esta categoría.</p> {# UI Change: Centrar mensaje #}
                 {% endfor %}
             </div>
 

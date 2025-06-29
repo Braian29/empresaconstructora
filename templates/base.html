@@ -1,24 +1,22 @@
-{% load static %} {# ¡¡¡CRITICAL FIX: Esta línea DEBE estar al principio del archivo!!! #}
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LE WORK Constructora{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  <!-- Bootstrap CSS -->
-    <!-- Font Awesome 6.0.0 (Actualizado para usar la última versión recomendada para íconos sólidos) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"> {# Enlace a tu CSS personalizado #}
-    <!-- Google Fonts: Oswald para encabezados, Open Sans para cuerpo -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top"> {# Añadido sticky-top para header fijo #}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'core:home' %}">
-                    <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Constructora Logo"> {# Usar el logo como imagen #}
+                    <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Constructora Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,18 +24,18 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            {# Añadido lógica para la clase 'active' para indicar la página actual #}
+                            {# UI Fix: Usando request.resolver_match.url_name para 'home' y 'contact' #}
+                            {# UI Fix: Usando request.resolver_match.app_name para el resto de apps #}
                             <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            {# Uso 'app_names.0' para detectar la aplicación actual #}
-                            <a class="nav-link {% if request.resolver_match.app_names.0 == 'about' %}active{% endif %}" href="{% url 'about:about' %}">Quiénes Somos</a>
+                            <a class="nav-link {% if request.resolver_match.app_name == 'about' %}active{% endif %}" href="{% url 'about:about' %}">Quiénes Somos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.app_names.0 == 'services' %}active{% endif %}" href="{% url 'services:service_list' %}">Servicios</a>
+                            <a class="nav-link {% if request.resolver_match.app_name == 'services' %}active{% endif %}" href="{% url 'services:service_list' %}">Servicios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.app_names.0 == 'projects' %}active{% endif %}" href="{% url 'projects:project_list' %}">Proyectos</a>
+                            <a class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}" href="{% url 'projects:project_list' %}">Proyectos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'core:contact' %}">Contacto</a>
@@ -52,14 +50,13 @@
         {% block content %}{% endblock %}
     </main>
 
-    {# WhatsApp Floating Icon - Ahora con Font Awesome y la nueva clase #}
     <a href="https://wa.me/+5491126370364" class="whatsapp-icon" target="_blank" aria-label="Contactar por WhatsApp">
-        <i class="fab fa-whatsapp"></i> {# Usamos el icono de Font Awesome #}
+        <i class="fab fa-whatsapp"></i>
     </a>
 
     <footer class="footer">
         <div class="container">
-            <div class="row text-center text-md-left"> {# Centrado en móviles, alineado a izq en desktop #}
+            <div class="row text-center text-md-left">
                 <div class="col-md-3 col-sm-6 logo-column">
                     <a href="{% url 'core:home' %}">
                         <img src="{% static 'core/img/logo.png' %}" alt="LE WORK Logo">
@@ -75,7 +72,6 @@
                     </ul>
                 </div>
                 <div class="col-md-3 col-12 contact-column">
-                    {# Usamos contact_info que viene del context processor #}
                     {% if contact_info %}
                         <p><i class="fas fa-phone"></i> <a href="tel:{{ contact_info.phone_number }}">{{ contact_info.phone_number }}</a></p>
                         <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/{{ contact_info.phone_number|cut:' ' }}" target="_blank">{{ contact_info.phone_number }}</a></p>
@@ -85,13 +81,12 @@
                             <p><i class="fas fa-map-marker-alt"></i> {{ contact_info.address }}</p>
                         {% endif %}
                     {% else %}
-                        {# Fallback si no hay información de contacto #}
                         <p><i class="fas fa-phone"></i> <a href="tel:+5491126370364">+54 9 11 2637-0364</a></p>
                         <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/+5491126370364" target="_blank">+54 9 11 2637-0364</a></p>
                         <p><i class="fas fa-envelope"></i> <a href="mailto:constructora.lework@hotmail.com">constructora.lework@hotmail.com</a></p>
                         <p><i class="fab fa-instagram"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank">Constructora Le Work</a></p>
                     {% endif %}
-                    <p class="copyright-text">© {% now 'Y' %} LE WORK Constructora. Todos los derechos reservados.</p> {# Clase para estilo específico #}
+                    <p class="copyright-text">© {% now 'Y' %} LE WORK Constructora. Todos los derechos reservados.</p>
                 </div>
             </div>
         </div>
@@ -101,25 +96,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Pequeño script para manejar la clase 'active' en la navegación
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-            navLinks.forEach(link => {
-                // Compara la URL completa
-                if (link.href === window.location.href) {
-                    link.classList.add('active');
-                } 
-                // Lógica adicional para URLs de subpáginas si es necesario (ej. /services/some-service-detail/)
-                // Esto podría ser más robusto con un enfoque Django en el template si las URLs no son exactas
-                else if (link.href.includes(window.location.host + '/about/') && window.location.href.includes('/about/')) {
-                    document.querySelector('.navbar-nav .nav-link[href*="/about/"]').classList.add('active');
-                } else if (link.href.includes(window.location.host + '/services/') && window.location.href.includes('/services/')) {
-                    document.querySelector('.navbar-nav .nav-link[href*="/services/"]').classList.add('active');
-                } else if (link.href.includes(window.location.host + '/projects/') && window.location.href.includes('/projects/')) {
-                    document.querySelector('.navbar-nav .nav-link[href*="/projects/"]').classList.add('active');
-                }
-            });
-        });
+        // UI Fix: El script JS para manejar la clase 'active' es ahora redundante y fue eliminado.
+        // La lógica se maneja de forma más eficiente y robusta directamente en el template de Django.
     </script>
     {% block extra_scripts %}{% endblock %}
 </body>

@@ -10,6 +10,8 @@
     --darker-red: #CA4C4C;           /* Rojo oscuro/terroso para hovers y acentos */
     --white: #FFFFFF;                /* Blanco */
     --whatsapp-green: #25D366;       /* Verde WhatsApp */
+    --section-bg-light: #F8F8F8;     /* Fondo muy claro para secciones intermedias */
+    --section-bg-dark: #F0F0F0;      /* Fondo ligeramente más oscuro para alternar secciones */
 }
 
 /* 2. Tipografía General */
@@ -18,6 +20,7 @@ body {
     color: var(--dark-text); /* Color de texto por defecto */
     line-height: 1.6;
     background-color: var(--white); /* Fondo general blanco */
+    overflow-x: hidden; /* Prevenir scroll horizontal en móviles */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,6 +35,26 @@ h1 { font-size: 3.5rem; } /* Muy grande, ideal para Hero Section */
 h2 { font-size: 2.5rem; }
 h3 { font-size: 2rem; }
 h4 { font-size: 1.5rem; }
+
+/* Global section titles */
+.section-title {
+    text-align: center;
+    margin-bottom: 60px; /* Mayor margen para separar el título del contenido */
+    position: relative;
+    padding-bottom: 15px; /* Espacio para el subrayado */
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px; /* Ancho del subrayado */
+    height: 4px; /* Grosor del subrayado */
+    background-color: var(--primary-red);
+    border-radius: 2px;
+}
+
 
 /* 3. Estilos Globales y Utilidades */
 a {
@@ -57,6 +80,9 @@ a:hover {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.05em; /* Espaciado entre letras para mejor legibilidad en mayúsculas */
+    display: inline-flex; /* Permite alinear icono con texto si se agrega */
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary-lework:hover,
@@ -65,6 +91,7 @@ a:hover {
     border-color: var(--darker-red);
     color: var(--white);
     box-shadow: none; /* Eliminar sombra predeterminada de Bootstrap en focus */
+    text-decoration: none;
 }
 
 .btn-outline-lework {
@@ -78,6 +105,9 @@ a:hover {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-outline-lework:hover,
@@ -86,19 +116,21 @@ a:hover {
     color: var(--white);
     border-color: var(--primary-red);
     box-shadow: none;
+    text-decoration: none;
 }
 
 /* Padding Estándar para Secciones */
-section {
-    padding: 80px 0; /* Mayor padding para un respiro visual */
+.section-spacing {
+    padding: 100px 0; /* Mayor padding para un respiro visual */
 }
 
 /* 4. Header (Navbar) */
 .navbar {
     background-color: var(--white) !important; /* Asegurar fondo blanco */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Sombra sutil y más prominente */
     padding: 0.8rem 0; /* Ajustar padding */
     transition: all 0.3s ease; /* Transición para si se vuelve pegajoso */
+    z-index: 1030; /* Asegurar que esté sobre otros elementos */
 }
 
 .navbar-brand img {
@@ -111,7 +143,7 @@ section {
 .navbar-nav .nav-item .nav-link {
     color: var(--dark-text); /* Color por defecto */
     font-weight: 500; /* Peso de fuente medio */
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 1.2rem; /* Más padding horizontal */
     transition: color 0.3s ease, border-bottom 0.3s ease;
     position: relative; /* Para el efecto de subrayado personalizado */
     text-transform: uppercase; /* Mayúsculas para los elementos de navegación */
@@ -133,7 +165,7 @@ section {
 
 .navbar-nav .nav-item .nav-link:hover::after,
 .navbar-nav .nav-item .nav-link.active::after {
-    width: calc(100% - 20px); /* Ocupa casi todo el ancho con un pequeño margen */
+    width: calc(100% - 24px); /* Ocupa casi todo el ancho con un pequeño margen (2x 1.2rem padding) */
 }
 
 .navbar-nav .nav-item .nav-link:hover,
@@ -144,23 +176,32 @@ section {
 /* Estilo para el botón del toggler en móviles */
 .navbar-toggler {
     border-color: rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    transition: box-shadow .15s ease-in-out;
 }
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba%2814, 14, 14, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
-
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-red), 0.25);
+}
 
 /* 5. Footer */
 .footer {
     background-color: var(--dark-text); /* Fondo oscuro para el footer */
     color: var(--light-blue-gray); /* Texto claro */
-    padding: 40px 0 20px 0; /* Ajustar padding */
+    padding: 60px 0 30px 0; /* Ajustar padding */
     font-size: 0.9rem;
 }
 
 .footer .logo-column {
     display: flex;
-    justify-content: center; /* Centrar logo en todas las pantallas */
+    justify-content: flex-start; /* Alinear a la izquierda en desktop */
     align-items: center;
     margin-bottom: 20px;
 }
@@ -197,16 +238,18 @@ section {
 }
 
 .footer .contact-column p {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Alinea el icono con la primera línea de texto */
     line-height: 1.4;
+    text-align: left; /* Asegura alineación a la izquierda */
 }
 
 .footer .contact-column p i {
-    margin-right: 10px;
+    margin-right: 12px;
     color: var(--primary-red); /* Color del icono */
-    font-size: 1.1em;
+    font-size: 1.2em;
+    padding-top: 2px; /* Pequeño ajuste vertical para iconos */
 }
 
 .footer .contact-column a {
@@ -241,12 +284,13 @@ section {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más prominente */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .whatsapp-icon:hover {
     transform: translateY(-8px); /* Efecto de "levantar" en hover */
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background-color: #20b857; /* Un verde un poco más oscuro en hover */
 }
 
 .whatsapp-icon i {
@@ -259,178 +303,289 @@ section {
     display: none;
 }
 
-/* 7. Estilos para Secciones Específicas (Placeholders, para implementar en tus templates Django) */
+/* 7. Estilos para Secciones Específicas */
 
 /* Hero Section (Home Page) */
-.hero-section {
+.hero {
     position: relative;
-    height: 70vh; /* Altura de la sección principal */
-    display: flex;
+    height: 80vh; /* Altura de la sección principal */
+    overflow: hidden; /* Oculta cualquier desbordamiento de contenido */
+}
+
+.hero-carousel .carousel-item {
+    height: 80vh; /* Misma altura que la sección hero */
+    background-size: cover;
+    background-position: center center;
+    display: flex; /* Para centrar el contenido */
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-carousel .carousel-item::before { /* Overlay oscuro para legibilidad del texto */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Ajustar opacidad del overlay */
+    z-index: 1;
+}
+
+.hero-carousel .carousel-item video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    background-size: cover;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2; /* Asegurar que el contenido esté sobre el overlay */
     color: var(--white);
-    /* Puedes usar una imagen de fondo dinámica aquí si lo manejas desde Django */
-    background: url("https://via.placeholder.com/1920x800/0E0E0E/FFFFFF?text=LEWORK+Hero+Image") no-repeat center center/cover; /* Imagen de fondo placeholder */
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro para legibilidad del texto */
-    background-blend-mode: multiply; /* Mezcla el overlay con la imagen */
+    max-width: 900px;
+    padding: 0 20px;
 }
 
 .hero-content h1 {
     color: var(--white);
-    font-size: 4rem; /* Título principal más grande */
-    margin-bottom: 0.5rem;
+    font-size: 4.5rem; /* Título principal más grande */
+    margin-bottom: 0.8rem;
     line-height: 1.1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4); /* Sombra para mejor legibilidad */
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6); /* Sombra para mejor legibilidad */
 }
 
 .hero-content p {
     color: var(--white);
-    font-size: 1.4rem;
-    margin-bottom: 2.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 3.5rem;
     font-weight: 300;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
 }
 
-.hero-ctas .btn {
+.hero-content .btn-primary-lework,
+.hero-content .btn-outline-lework {
+    min-width: 220px;
     margin: 0 15px;
-    min-width: 200px;
+    padding: 1rem 2.5rem; /* Botones más grandes en el hero */
+    font-size: 1.1rem;
+    border-width: 2px; /* Borde más grueso para destacar */
 }
 
-/* Sección "Quiénes Somos" (Snippet en Home o página About) */
-.about-snippet, .about-page-content {
+.hero-content .btn-outline-lework {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente para el botón secundario */
+    color: var(--white);
+    border-color: var(--white);
+}
+
+.hero-content .btn-outline-lework:hover {
+    background-color: var(--white);
+    color: var(--primary-red);
+}
+
+/* Carrusel Indicators/Controls */
+.carousel-indicators li {
+    background-color: var(--white);
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin: 0 7px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+.carousel-indicators .active {
+    opacity: 1;
+    background-color: var(--primary-red); /* Indicator activo en rojo */
+}
+
+.carousel-control-prev, .carousel-control-next {
+    width: 8%; /* Área de click más grande */
+}
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    width: 2.5rem; /* Iconos más grandes */
+    height: 2.5rem;
+}
+
+
+/* Sección "Quiénes Somos" (Snippet en Home) */
+.home-about-us {
     background-color: var(--warm-light-beige); /* Fondo cálido */
-    padding: 80px 0;
-    text-align: center;
+    text-align: left;
 }
-.about-snippet h2, .about-page-content h2 {
-    color: var(--dark-text);
+.home-about-us .section-title {
+    text-align: left; /* Título alineado a la izquierda */
     margin-bottom: 40px;
+    padding-bottom: 15px;
+    margin-left: 0;
+    transform: translateX(0); /* Deshacer transformación de centrado */
 }
-.about-snippet p, .about-page-content p {
-    max-width: 800px;
-    margin: 0 auto 30px auto;
-    font-size: 1.15rem;
-    color: var(--dark-text);
+.home-about-us .section-title::after {
+    left: 0;
+    transform: translateX(0);
 }
 
-/* Sección "Nuestros Servicios Destacados" */
-.featured-services {
-    padding: 80px 0;
-    background-color: var(--light-blue-gray); /* Un fondo sutil */
-    text-align: center;
+.home-about-us .lead {
+    font-size: 1.25rem;
+    margin-bottom: 25px;
+    color: var(--dark-text);
 }
-.featured-services .service-card {
+.home-about-us p { /* Para la misión resumida */
+    font-size: 1.1rem;
+    color: var(--medium-gray);
+    margin-bottom: 30px;
+}
+.home-about-us .img-fluid {
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+
+.values-grid {
+    margin-top: 80px !important; /* Más espacio sobre la sección de valores */
+}
+.values-grid .value-item {
     background-color: var(--white);
     padding: 30px;
-    margin-bottom: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra suave */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    text-align: left; /* Contenido de la tarjeta alineado a la izquierda */
+    align-items: center;
+    justify-content: center;
 }
-.featured-services .service-card:hover {
-    transform: translateY(-8px); /* Efecto de levantamiento */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+.values-grid .value-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
-.featured-services .service-card i {
-    font-size: 3.5rem; /* Iconos más grandes */
+.values-grid .value-item .value-icon {
+    width: 70px; /* Tamaño fijo para iconos SVG */
+    height: 70px;
+    margin-bottom: 25px;
+    color: var(--primary-red); /* Asegura que los iconos de Font Awesome tengan el color */
+}
+/* Estilos para Font Awesome en valores */
+.values-grid .value-item i.fas {
+    font-size: 3.8rem;
     color: var(--primary-red);
     margin-bottom: 20px;
 }
-.featured-services .service-card h3 {
-    font-size: 1.7rem;
+.values-grid .value-item h4 {
+    font-size: 1.8rem;
+    color: var(--dark-text);
+    margin-bottom: 10px;
+}
+.values-grid .value-item p {
+    font-size: 1rem;
+    color: var(--medium-gray);
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* Sección de Servicios Destacados */
+.home-services {
+    background-color: var(--section-bg-light); /* Un fondo sutil */
+}
+.home-services .service-item {
+    background-color: var(--white);
+    padding: 35px; /* Mayor padding */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinea contenido al inicio */
+    align-items: center; /* Centra el contenido horizontalmente */
+    text-align: center; /* Centra el texto */
+}
+.home-services .service-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.home-services .service-item .service-icon {
+    width: 75px; /* Tamaño fijo para iconos SVG */
+    height: 75px;
+    margin-bottom: 25px;
+    color: var(--primary-red); /* Asegura que los iconos de Font Awesome tengan el color */
+}
+/* Estilos para Font Awesome en servicios */
+.home-services .service-item i.fas {
+    font-size: 4rem;
+    color: var(--primary-red);
+    margin-bottom: 25px;
+}
+.home-services .service-item h4 {
+    font-size: 2rem;
     margin-bottom: 15px;
     color: var(--dark-text);
 }
-.featured-services .service-card p {
+.home-services .service-item p {
     color: var(--medium-gray);
     flex-grow: 1; /* Permite que el párrafo ocupe el espacio disponible */
-    font-size: 1rem;
+    font-size: 1.05rem;
+    margin-bottom: 25px;
+}
+.home-services .service-item .btn-outline-lework {
+    margin-top: auto; /* Empuja el botón hacia abajo */
 }
 
-/* Sección "Proyectos Destacados" */
-.featured-projects {
-    padding: 80px 0;
+/* Sección de Proyectos Recientes */
+.home-projects {
     background-color: var(--white);
-    text-align: center;
 }
-.featured-projects .project-item {
+.home-projects .project-item {
     position: relative;
     overflow: hidden;
-    margin-bottom: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     display: block; /* Para que toda la tarjeta sea cliqueable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Asegura uniformidad de altura */
 }
-.featured-projects .project-item img {
+.home-projects .project-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.home-projects .project-item img {
     width: 100%;
     height: 280px; /* Altura fija para uniformidad */
     object-fit: cover;
     display: block;
     transition: transform 0.5s ease;
 }
-.featured-projects .project-item:hover img {
+.home-projects .project-item:hover img {
     transform: scale(1.08); /* Zoom sutil en la imagen */
 }
-.featured-projects .project-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(var(--dark-text), 0.75); /* Overlay oscuro con transparencia */
-    color: var(--white);
+.home-projects .project-item .p-3 { /* Contenedor de texto debajo de la imagen */
+    background-color: var(--white);
+    text-align: left;
+    min-height: 100px; /* Asegura un mínimo de altura para el texto */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    opacity: 0; /* Oculto por defecto */
-    transition: opacity 0.3s ease;
-    text-align: center;
-    padding: 20px;
 }
-.featured-projects .project-item:hover .project-overlay {
-    opacity: 1; /* Visible en hover */
-}
-.featured-projects .project-overlay h4 {
-    color: var(--white);
-    margin-bottom: 10px;
-    font-size: 1.7rem;
-}
-.featured-projects .project-overlay p {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* Sección "Nuestros Valores" */
-.our-values {
-    background-color: var(--warm-light-beige); /* Fondo cálido para los valores */
-    padding: 80px 0;
-    text-align: center;
-}
-.our-values .value-item {
-    margin-bottom: 30px;
-}
-.our-values .value-item i {
-    font-size: 3.5rem; /* Iconos de valores más grandes */
-    color: var(--primary-red);
-    margin-bottom: 20px;
-}
-.our-values .value-item h4 {
-    font-size: 1.7rem;
-    margin-bottom: 10px;
-}
-.our-values .value-item p {
+.home-projects .project-item h5 {
     color: var(--dark-text);
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+}
+.home-projects .project-item p {
+    color: var(--medium-gray);
     font-size: 1rem;
+    margin-bottom: 0;
 }
 
 /* Sección Final CTA (Llamada a la acción) */
@@ -460,26 +615,56 @@ section {
 }
 
 /* Estilos para la Página de Contacto */
+.contact-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{% static 'core/img/contact_hero_placeholder.jpg' %}") no-repeat center center/cover;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+}
+.contact-hero h1 {
+    font-size: 4rem;
+    color: var(--white);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
 .contact-form-section {
     padding: 80px 0;
-    background-color: var(--white);
+    background-color: var(--section-bg-light);
 }
 .contact-form-section h2 {
     text-align: center;
     margin-bottom: 40px;
+    font-size: 2.2rem;
+}
+.contact-form-section .form-group {
+    margin-bottom: 20px;
+}
+.contact-form-section label {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+    display: block;
 }
 .contact-form-section .form-control {
     border-radius: 0.3rem;
     border: 1px solid var(--medium-gray);
     padding: 0.8rem 1rem;
     font-size: 1rem;
-    margin-bottom: 20px; /* Más espacio entre campos */
+    background-color: var(--white);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
 }
 .contact-form-section .form-control:focus {
     border-color: var(--primary-red);
     box-shadow: 0 0 0 0.2rem rgba(251, 53, 53, 0.25); /* Sombra de focus sutil */
 }
-.contact-info-block {
+.contact-form-section textarea.form-control {
+    min-height: 120px; /* Altura mínima para el área de texto */
+    resize: vertical; /* Permite redimensionar verticalmente */
+}
+.contact-info {
     background-color: var(--light-blue-gray);
     padding: 40px; /* Mayor padding */
     border-radius: 8px;
@@ -487,184 +672,253 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
-.contact-info-block p {
+.contact-info h2 {
+    text-align: center; /* Centrar título de info de contacto */
+    margin-bottom: 30px;
+}
+.contact-info p {
     margin-bottom: 18px; /* Más espacio entre líneas de contacto */
     font-size: 1.1rem;
     display: flex;
     align-items: center;
     color: var(--dark-text);
 }
-.contact-info-block p i {
+.contact-info p i {
     margin-right: 15px;
     font-size: 1.6rem; /* Iconos más grandes */
     color: var(--primary-red);
 }
-.contact-info-block a {
+.contact-info a {
     color: var(--dark-text);
     font-weight: 500;
 }
-.contact-info-block a:hover {
+.contact-info a:hover {
     color: var(--primary-red);
     text-decoration: none;
 }
-.contact-map {
-    margin-top: 40px; /* Espacio antes del mapa */
-}
-.contact-map iframe {
+#map {
+    height: 350px; /* Altura del mapa */
     width: 100%;
-    height: 400px; /* Altura del mapa */
     border: 0;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-top: 30px; /* Espacio antes del mapa */
 }
 
 /* Estilos para la Página "Quiénes Somos" */
-.about-page-content {
+.about-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{% static 'core/img/about_hero_placeholder.jpg' %}") no-repeat center center/cover;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+}
+.about-hero h1 {
+    font-size: 4rem;
+    color: var(--white);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+.about-us-section {
     background-color: var(--warm-light-beige); /* Fondo cálido */
     padding: 80px 0;
 }
-.about-page-content h2 {
-    margin-bottom: 40px;
+.about-us-section h2 {
     text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.2rem;
 }
-.about-page-content p {
+.about-us-section p {
     font-size: 1.1rem;
     margin-bottom: 20px;
     color: var(--dark-text);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
-.mission-vision-values {
-    margin-top: 40px;
+.about-us-section .row + .row { /* Espacio entre filas de secciones */
+    margin-top: 60px;
 }
-.mission-vision-values .card {
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 30px;
-    background-color: var(--white);
+
+/* Misión, Visión, Valores en About Page */
+.about-mission, .about-vision, .about-values {
     padding: 30px;
-    text-align: center;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left; /* Alinea el texto a la izquierda */
 }
-.mission-vision-values .card h4 {
+.about-mission h2, .about-vision h2, .about-values h2 {
+    text-align: left; /* Títulos de Misión/Visión/Valores alineados a la izquierda */
+    font-size: 1.8rem;
     color: var(--primary-red);
-    margin-bottom: 15px;
-    font-size: 1.6rem;
-}
-.mission-vision-values .card p {
-    font-size: 1rem;
-    color: var(--dark-text);
-}
-.team-section {
-    background-color: var(--light-blue-gray);
-    padding: 80px 0;
-    text-align: center;
-}
-.team-member-card {
-    background-color: var(--white);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 30px;
-}
-.team-member-card img {
-    width: 160px; /* Tamaño de imagen de perfil */
-    height: 160px;
-    border-radius: 50%; /* Circular */
-    object-fit: cover;
     margin-bottom: 20px;
-    border: 4px solid var(--primary-red); /* Borde rojo */
-}
-.team-member-card h4 {
-    margin-bottom: 8px;
-    font-size: 1.5rem;
-}
-.team-member-card p {
-    color: var(--medium-gray);
-    font-size: 1rem;
-}
-
-/* Estilos para la Página de Servicios */
-.services-page-list {
-    padding: 80px 0;
-    background-color: var(--warm-light-beige);
-}
-.service-accordion .card {
-    border: none;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    overflow: hidden; /* Para que el border-radius se aplique al contenido */
-}
-.service-accordion .card-header {
-    background-color: var(--primary-red);
-    padding: 0;
-    border-bottom: none;
-    cursor: pointer;
-}
-.service-accordion .card-header h2 button {
-    color: var(--white);
-    text-align: left;
-    font-size: 1.6rem;
-    padding: 1.2rem 2rem; /* Mayor padding para el botón del acordeón */
-    display: block;
-    width: 100%;
-    text-decoration: none;
     position: relative;
-    font-weight: 700;
+    padding-bottom: 10px;
 }
-.service-accordion .card-header h2 button:focus {
-    box-shadow: none;
-}
-/* Icono de Font Awesome para el acordeón (chevron-down) */
-.service-accordion .card-header h2 button::after {
-    content: '\f078'; /* Código del icono chevron-down (Font Awesome 6 Free) */
-    font-family: 'Font Awesome 6 Free'; /* Asegúrate de que esta fuente esté cargada */
-    font-weight: 900; /* Para el estilo 'solid' */
+.about-mission h2::after, .about-vision h2::after, .about-values h2::after {
+    content: '';
     position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%) rotate(0deg);
-    transition: transform 0.3s ease;
-}
-.service-accordion .card-header h2 button[aria-expanded="true"]::after {
-    transform: translateY(-50%) rotate(180deg); /* Gira el icono al expandirse */
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--darker-red);
+    border-radius: 2px;
 }
 
-.service-accordion .card-body {
-    background-color: var(--white);
-    padding: 2rem;
-    border: 1px solid var(--light-blue-gray);
-    border-top: none; /* No hay borde superior cuando está abierto */
-    border-radius: 0 0 8px 8px;
-    color: var(--dark-text);
-}
-.service-accordion .card-body ul {
+.about-values ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 0; /* Eliminar margen inferior si es el último elemento */
 }
-.service-accordion .card-body ul li {
-    margin-bottom: 10px;
+.about-values li {
+    margin-bottom: 15px;
     display: flex;
     align-items: flex-start;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    color: var(--dark-text);
 }
-.service-accordion .card-body ul li i {
-    margin-right: 12px;
+.about-values .value-icon { /* Para iconos que vienen de la DB (img src) */
+    width: 35px;
+    height: 35px;
+    margin-right: 15px;
+    flex-shrink: 0; /* No permite que el icono se encoja */
+}
+.about-values li i.fas { /* Para iconos de Font Awesome */
+    font-size: 1.5em;
     color: var(--primary-red);
-    font-size: 1.2em;
-    line-height: 1.6; /* Alinea el icono con el texto */
+    margin-right: 15px;
+    flex-shrink: 0;
+    padding-top: 3px;
 }
 
-/* Estilos para la Página de Proyectos (Galería) */
-.projects-page-gallery {
-    padding: 80px 0;
-    background-color: var(--light-blue-gray);
+/* El Equipo Section */
+.team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
 }
-.projects-page-gallery .filters {
+.team-member {
+    background-color: var(--white);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     text-align: center;
-    margin-bottom: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.projects-page-gallery .filters button {
+.team-member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.team-member-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-red);
+    margin-bottom: 20px;
+    box-shadow: 0 0 0 5px rgba(var(--primary-red), 0.1);
+}
+.team-member h3 {
+    font-size: 1.7rem;
+    color: var(--dark-text);
+    margin-bottom: 5px;
+}
+.team-member p {
+    font-size: 1.05rem;
+    color: var(--medium-gray);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+.team-member .member-bio {
+    font-size: 0.95rem;
+    color: var(--medium-gray);
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+/* Testimonios Section (About Page) */
+.testimonials-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+.testimonial {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+.testimonial-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid var(--light-blue-gray);
+}
+.testimonial p {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--dark-text);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+.testimonial-author {
+    font-weight: 700;
+    color: var(--primary-red);
+    font-size: 1rem;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+/* Estilos para la Página de Servicios (service_list.html) */
+.services-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{% static 'core/img/services_hero_placeholder.jpg' %}") no-repeat center center/cover;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+}
+.services-hero h1 {
+    font-size: 4rem;
+    color: var(--white);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+.services-hero p {
+    font-size: 1.5rem;
+    color: var(--white);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.services-list {
+    padding: 80px 0;
+    background-color: var(--section-bg-light);
+}
+.filter-options {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.filter-button {
     background-color: var(--white);
     color: var(--dark-text);
     border: 1px solid var(--medium-gray);
@@ -673,105 +927,345 @@ section {
     border-radius: 25px; /* Botones de filtro redondeados */
     transition: all 0.3s ease;
     font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
 }
-.projects-page-gallery .filters button:hover,
-.projects-page-gallery .filters button.active {
+.filter-button:hover,
+.filter-button.active {
+    background-color: var(--primary-red);
+    color: var(--white);
+    border-color: var(--primary-red);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+.service-card {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Asegura uniformidad */
+    display: flex;
+    flex-direction: column;
+}
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.service-card img {
+    width: 100%;
+    height: 220px; /* Altura fija para las imágenes de servicio */
+    object-fit: cover;
+    border-bottom: 1px solid var(--light-blue-gray);
+}
+.service-card h2 {
+    font-size: 1.8rem;
+    color: var(--dark-text);
+    margin: 20px 20px 10px 20px;
+    text-align: left;
+}
+.service-card p {
+    font-size: 1.05rem;
+    color: var(--medium-gray);
+    margin: 0 20px 20px 20px;
+    flex-grow: 1;
+    text-align: left;
+}
+.service-card .btn-primary-lework {
+    margin: 0 20px 20px 20px;
+    align-self: flex-start; /* Alinea el botón a la izquierda */
+}
+.no-services-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--medium-gray);
+    width: 100%;
+    padding: 50px 0;
+}
+
+/* Estilos para la Página de Detalle de Servicio (service_detail.html) */
+.service-detail {
+    padding: 80px 0;
+    background-color: var(--section-bg-dark);
+}
+.service-detail h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--dark-text);
+    font-size: 3rem;
+}
+.service-detail img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 40px;
+}
+.service-detail p {
+    font-size: 1.15rem;
+    color: var(--dark-text);
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+.service-detail h2 {
+    font-size: 2.2rem;
+    color: var(--primary-red);
+    margin-top: 60px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.service-detail .project-card {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px; /* Margen inferior para tarjetas de proyecto */
+}
+.service-detail .project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.service-detail .project-card img {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid var(--light-blue-gray);
+    margin-bottom: 0; /* Reset margin */
+    border-radius: 8px 8px 0 0; /* Solo esquinas superiores redondeadas */
+}
+.service-detail .project-card h3 {
+    font-size: 1.5rem;
+    color: var(--dark-text);
+    margin: 15px 15px 20px 15px;
+    text-align: center;
+}
+.service-detail .no-projects-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--medium-gray);
+    width: 100%;
+    margin-top: 20px;
+}
+.service-detail .btn-primary-lework,
+.service-detail .btn-outline-lework {
+    margin-top: 40px;
+    margin-right: 15px;
+    min-width: 180px;
+}
+
+/* Estilos para la Página de Proyectos (project_list.html) */
+.hero-section-projects {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{% static 'core/img/projects_hero_placeholder.jpg' %}") no-repeat center center/cover;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+}
+.hero-section-projects h1 {
+    font-size: 4rem;
+    color: var(--white);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+.hero-section-projects p {
+    font-size: 1.5rem;
+    color: var(--white);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.projects-section {
+    padding: 80px 0;
+    background-color: var(--section-bg-light);
+}
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+.project-item { /* Usada tanto en home como en project_list */
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+    display: block; /* Asegura que el enlace ocupe toda la tarjeta */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+.project-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.project-item img {
+    width: 100%;
+    height: 250px; /* Altura fija para las miniaturas de proyecto */
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.project-item:hover img {
+    transform: scale(1.08);
+}
+.project-item .project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--dark-text), 0.75); /* Overlay oscuro con transparencia */
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease;
+    text-align: center;
+    padding: 20px;
+}
+.project-item:hover .project-overlay {
+    opacity: 1; /* Visible en hover */
+}
+.project-item .project-overlay h3 {
+    color: var(--white);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+.project-item .project-overlay p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0;
+}
+.no-projects-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--medium-gray);
+    width: 100%;
+    padding: 50px 0;
+}
+
+/* Pagination Styles */
+.pagination {
+    margin-top: 50px;
+    text-align: center;
+}
+.pagination a, .pagination .current {
+    display: inline-block;
+    padding: 10px 18px;
+    margin: 0 5px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 5px;
+    color: var(--dark-text);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+.pagination a:hover {
+    background-color: var(--primary-red);
+    color: var(--white);
+    border-color: var(--primary-red);
+}
+.pagination .current {
     background-color: var(--primary-red);
     color: var(--white);
     border-color: var(--primary-red);
 }
 
-.project-grid .project-item-page {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    background-color: var(--white);
-    display: block; /* Hace que toda la tarjeta sea cliqueable */
-    color: inherit; /* Hereda el color del texto para los enlaces */
-    text-decoration: none; /* Quitar subrayado por defecto del enlace */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Estilos para la Página de Detalle de Proyecto (project_detail.html) */
+.project-detail {
+    padding: 80px 0;
+    background-color: var(--section-bg-dark);
 }
-.project-grid .project-item-page img {
-    width: 100%;
-    height: 250px; /* Altura fija para la imagen del proyecto */
-    object-fit: cover;
-    display: block;
-    border-bottom: 1px solid var(--light-blue-gray);
-}
-.project-grid .project-item-page .project-info {
-    padding: 20px;
-    text-align: left;
-}
-.project-grid .project-item-page .project-info h4 {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
+.project-detail .project-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 3.5rem;
     color: var(--dark-text);
 }
-.project-grid .project-item-page .project-info p {
+.project-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 50px;
+}
+.project-gallery img {
+    width: 100%;
+    height: 300px; /* Altura fija para imágenes de la galería */
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+.project-info {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+.project-info .project-description {
+    font-size: 1.15rem;
+    color: var(--dark-text);
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+.project-info .project-details p {
+    font-size: 1.05rem;
+    color: var(--dark-text);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+.project-info .project-details p strong {
+    color: var(--primary-red);
+    font-weight: 700;
+    margin-right: 8px;
+}
+.project-testimonial {
+    background-color: var(--warm-light-beige);
+    border-left: 5px solid var(--primary-red);
+    padding: 25px;
+    margin-top: 40px;
+    border-radius: 0 8px 8px 0; /* Solo esquinas derechas redondeadas */
+}
+.project-testimonial blockquote {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--dark-text);
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+.project-testimonial .testimonial-author {
+    font-weight: 700;
+    color: var(--primary-red);
+    text-align: right;
     font-size: 1rem;
-    color: var(--medium-gray);
     margin-bottom: 0;
 }
-.project-grid .project-item-page:hover {
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-8px); /* Efecto de levantamiento */
-}
-
-/* Estilos para la Página de Detalle de Proyecto */
-.project-detail-section {
-    padding: 80px 0;
-    background-color: var(--warm-light-beige);
-}
-.project-detail-section h1 {
-    text-align: center;
-    margin-bottom: 40px;
-    color: var(--dark-text);
-}
-.project-gallery-carousel img {
-    max-height: 550px; /* Limitar altura de las imágenes del carrusel */
-    width: 100%;
-    object-fit: contain; /* Asegura que la imagen quepa sin recorte excesivo */
-    margin: 0 auto;
-    display: block;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-.project-details-text h3 {
-    color: var(--primary-red);
-    margin-top: 30px;
-    margin-bottom: 15px;
-    font-size: 2rem;
-}
-.project-details-text p {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: var(--dark-text);
-}
-.project-info-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-.project-info-list li {
-    margin-bottom: 10px;
-    color: var(--dark-text);
-    font-size: 1.1rem;
-    display: flex; /* Para alinear el strong */
-    align-items: baseline;
-}
-.project-info-list li strong {
-    color: var(--primary-red);
-    margin-right: 10px;
-    min-width: 120px; /* Alinea los dos puntos */
-    display: inline-block;
+.project-detail .btn-primary-lework {
+    margin-top: 40px;
+    min-width: 200px;
 }
 
 /* 8. Ajustes Responsivos */
+@media (max-width: 1200px) {
+    .hero-content h1 { font-size: 4rem; }
+    .hero-content p { font-size: 1.4rem; }
+}
+
 @media (max-width: 992px) {
     h1 { font-size: 3rem; }
     h2 { font-size: 2.2rem; }
+    .hero-carousel .carousel-item { height: 70vh; }
     .hero-content h1 { font-size: 3.5rem; }
     .hero-content p { font-size: 1.2rem; }
     .navbar-brand img { height: 45px; } /* Ajuste del logo en tabletas */
@@ -789,6 +1283,9 @@ section {
     .navbar-nav .nav-item .nav-link.active::after {
         width: 100%;
     }
+    .footer .logo-column {
+        justify-content: center; /* Centrar logo en tabletas/móviles */
+    }
     .footer .navigation-column ul {
         flex-direction: column; /* Apilar enlaces de navegación en móvil */
         align-items: center;
@@ -796,22 +1293,60 @@ section {
     .footer .navigation-column li {
         margin: 5px 0;
     }
-    .footer .logo-column,
     .footer .contact-column {
-        text-align: center;
+        text-align: center; /* Centrar columna de contacto en tabletas/móviles */
     }
     .footer .contact-column p {
         justify-content: center; /* Centrar información de contacto en móvil */
+    }
+
+    .home-about-us .section-title {
+        text-align: center; /* Centrar el título en el snippet de About Us en móviles */
+    }
+    .home-about-us .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .about-us-section .col-md-4 { /* Misión, Visión, Valores */
+        margin-bottom: 30px;
+    }
+    .about-mission, .about-vision, .about-values {
+        text-align: center;
+        align-items: center;
+    }
+    .about-mission h2::after, .about-vision h2::after, .about-values h2::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .service-detail .btn-primary-lework,
+    .service-detail .btn-outline-lework,
+    .project-detail .btn-primary-lework {
+        display: block;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
     }
 }
 
 @media (max-width: 767px) {
     h1 { font-size: 2.5rem; }
     h2 { font-size: 2rem; }
-    .hero-section { height: 60vh; padding: 40px 0; }
+    .section-spacing { padding: 60px 0; }
+    .section-title { margin-bottom: 40px; }
+
+    .hero-carousel .carousel-item { height: 60vh; }
     .hero-content h1 { font-size: 2.8rem; }
     .hero-content p { font-size: 1.1rem; margin-bottom: 2rem; }
-    section { padding: 50px 0; } /* Ajuste de padding general en móviles */
+    .hero-content .btn-primary-lework,
+    .hero-content .btn-outline-lework {
+        min-width: unset;
+        width: 80%;
+        margin: 10px auto;
+        display: block;
+    }
 
     .whatsapp-icon {
         width: 55px;
@@ -822,24 +1357,67 @@ section {
     .whatsapp-icon i {
         font-size: 2.2rem;
     }
-    .featured-services .service-card,
-    .featured-projects .project-item,
-    .team-member-card,
-    .mission-vision-values .card {
+    .featured-services .service-item,
+    .home-projects .project-item,
+    .values-grid .value-item,
+    .team-member,
+    .testimonial,
+    .service-card,
+    .project-item {
         margin-bottom: 25px; /* Ajuste de márgenes en móvil */
     }
-    .final-cta h2 { font-size: 2.2rem; }
-    .contact-info-block { margin-top: 30px; }
+    .final-cta h2 { font-size: 2.5rem; }
+    .contact-info { margin-top: 40px; }
+    #map { height: 300px; margin-top: 25px; }
+
+    .about-hero h1, .contact-hero h1, .services-hero h1, .hero-section-projects h1 {
+        font-size: 3rem;
+    }
+    .services-hero p, .hero-section-projects p {
+        font-size: 1.2rem;
+    }
+    .project-detail .project-title {
+        font-size: 2.8rem;
+    }
 }
 
 @media (max-width: 576px) {
     h1 { font-size: 2rem; }
     h2 { font-size: 1.8rem; }
+    .hero-carousel .carousel-item { height: 50vh; }
     .hero-content h1 { font-size: 2.2rem; }
     .hero-content p { font-size: 1rem; }
-    .hero-ctas .btn {
-        display: block; /* Botones apilados en pantallas muy pequeñas */
-        margin: 10px auto;
-        width: 80%; /* Ancho completo */
+    .btn-primary-lework, .btn-outline-lework {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    .footer .navigation-column li {
+        width: 100%; /* Ocupa el ancho completo en pantallas muy pequeñas */
+        text-align: center;
+        margin: 5px 0;
+    }
+    .footer .contact-column p {
+        justify-content: flex-start; /* Vuelve a alinear a la izquierda en contacto si es muy estrecho */
+        text-align: left;
+    }
+
+    .about-hero h1, .contact-hero h1, .services-hero h1, .hero-section-projects h1 {
+        font-size: 2.5rem;
+    }
+    .services-hero p, .hero-section-projects p {
+        font-size: 1.05rem;
+    }
+    .project-detail .project-title {
+        font-size: 2.5rem;
+    }
+    .project-gallery {
+        grid-template-columns: 1fr; /* Una columna en móviles muy pequeños */
+    }
+    .team-members, .testimonials-container, .service-grid, .project-grid {
+        gap: 20px;
+    }
+    .filter-button {
+        padding: 8px 18px;
+        font-size: 0.85rem;
     }
 }

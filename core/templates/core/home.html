@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}LE WORK Constructora - Inicio{% endblock %}
@@ -6,8 +6,8 @@
 {% block content %}
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-carousel">
+    <section class="hero"> {# UI Change: Nueva clase 'hero' para la sección principal #}
+        <div class="hero-carousel"> {# UI Change: Contenedor para el carrusel #}
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     {% for item in carousel_items %}
@@ -16,19 +16,23 @@
                 </ol>
                 <div class="carousel-inner">
                     {% for item in carousel_items %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}" style="background-image: url({{ item.image_url }});">
+                        {# UI Change: carousel-item toma la background-image de item.image_url #}
+                        {# Si hay video, el video se posiciona encima. Si no, solo se usa la imagen de fondo. #}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}" {% if item.image_url %}style="background-image: url({{ item.image_url }});"{% endif %}>
                             {% if item.video_url %}
                                 <video class="d-block w-100" autoplay loop muted>
                                     <source src="{{ item.video_url }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
                             {% endif %}
-                            <div class="hero-content">
+                            <div class="hero-content"> {# UI Change: Contenido centrado sobre el carrusel #}
                                 <h1>Tu casa, tu lugar, nuestro compromiso.</h1>
                                 <p>Construyendo sueños con calidad y cercanía desde hace 22 años.</p>
-                                <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Ver Proyectos</a>
-                                <a href="{% url 'core:contact' %}" class="btn btn-secondary">Solicitar Presupuesto</a>
-                            </div>
+                                <div class="hero-ctas"> {# UI Change: Contenedor para los botones #}
+                                    <a href="{% url 'projects:project_list' %}" class="btn-primary-lework">Ver Proyectos</a> {# UI Change: Usar nueva clase de botón #}
+                                    <a href="{% url 'core:contact' %}" class="btn-outline-lework">Solicitar Presupuesto</a> {# UI Change: Usar nueva clase de botón #}
+                                </div>
+                           </div>
                        </div>
                     {% endfor %}
                 </div>
@@ -42,9 +46,7 @@
                 </a>
             </div>
         </div>
-        <a href="https://wa.me/+5491126370364" class="whatsapp-icon" target="_blank">
-            <img src="{% static 'core/img/whatsapp-icon.svg' %}" alt="WhatsApp">
-        </a>
+        {# UI Change: El icono de WhatsApp ya no necesita estar aquí, está en base.html #}
     </section>
 
     <!-- Rest of the content -->

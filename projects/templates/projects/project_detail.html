@@ -1,26 +1,25 @@
-{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 
-<section class="project-detail">
+<section class="project-detail section-spacing"> {# UI Change: Clase principal para el detalle de proyecto #}
     <div class="container">
-        <h1 class="project-title">{{ project.title }}</h1>
+        <h1 class="project-title">{{ project.title }}</h1> {# UI Change: Clase para el título #}
 
-        <div class="project-gallery">
+        <div class="project-gallery"> {# UI Change: Contenedor para la galería de imágenes #}
             {% for image in project.images.all %}
-                <img src="{{ image.image.url }}" alt="{{ project.title }} - Image {{ forloop.counter }}" class="project-image">
+                <img src="{{ image.image.url }}" alt="{{ project.title }} - Image {{ forloop.counter }}" class="project-image"> {# UI Change: Clase para las imágenes #}
             {% empty %}
                 <p>No hay imágenes disponibles para este proyecto.</p>
-                {# Placeholder de imagen si no hay ninguna #}
                 <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available" class="project-image">
             {% endfor %}
         </div>
 
-        <div class="project-info">
-            <p class="project-description">{{ project.detailed_description|linebreaksbr }}</p>
+        <div class="project-info"> {# UI Change: Contenedor para la información del proyecto #}
+            <p class="project-description">{{ project.detailed_description|linebreaksbr }}</p> {# UI Change: Clase para la descripción detallada #}
 
-            <div class="project-details">
+            <div class="project-details"> {# UI Change: Contenedor para los detalles clave #}
                 <p><strong>Categorías:</strong> {% for category in project.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                 {% if project.service_type %}<p><strong>Tipo de Servicio:</strong> {{ project.service_type }}</p>{% endif %}
                 {% if project.duration %}<p><strong>Duración del Proyecto:</strong> {{ project.duration }}</p>{% endif %}
@@ -29,13 +28,13 @@
                 </div>
 
             {% if project.client_testimonial_quote %}
-                <div class="project-testimonial">
+                <div class="project-testimonial"> {# UI Change: Nueva clase para el testimonio #}
                     <blockquote>"{{ project.client_testimonial_quote|linebreaksbr }}"</blockquote>
                     <p class="testimonial-author">— {% if project.client_testimonial_author %}{{ project.client_testimonial_author }}{% else %}Cliente Anónimo{% endif %}</p>
                 </div>
             {% endif %}
 
-           <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Ver otros proyectos</a>
+           <a href="{% url 'projects:project_list' %}" class="btn-primary-lework">Ver otros proyectos</a> {# UI Change: Usar nueva clase de botón #}
         </div>
     </div>
 </section>
