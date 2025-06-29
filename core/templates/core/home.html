@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block title %}LE WORK Constructora - Inicio{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-carousel">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {% for item in carousel_items %}
+                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                    {% endfor %}
+                </ol>
+                <div class="carousel-inner">
+                    {% for item in carousel_items %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}" style="background-image: url({{ item.image_url }});">
+                            {% if item.video_url %}
+                                <video class="d-block w-100" autoplay loop muted>
+                                    <source src="{{ item.video_url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            {% endif %}
+                            <div class="hero-content">
+                                <h1>Tu casa, tu lugar, nuestro compromiso.</h1>
+                                <p>Construyendo sueños con calidad y cercanía desde hace 22 años.</p>
+                                <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Ver Proyectos</a>
+                                <a href="{% url 'core:contact' %}" class="btn btn-secondary">Solicitar Presupuesto</a>
+                            </div>
+                       </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <a href="https://wa.me/+5491126370364" class="whatsapp-icon" target="_blank">
+            <img src="{% static 'core/img/whatsapp-icon.svg' %}" alt="WhatsApp">
+        </a>
+    </section>
+
+    <!-- Rest of the content -->
+    {% include 'core/home_sections.html' %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    $('.carousel').carousel({
+        interval: 5000, // Time in milliseconds between slides
+        pause: "hover" // Pause on hover
+    });
+
+</script>
+{% endblock %}

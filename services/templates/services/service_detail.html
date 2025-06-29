@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block content %}
+
+<section class="service-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ service.title }}</h1>
+
+                {% if service.image %}
+                    <img src="{{ service.image.url }}" alt="{{ service.title }}" class="img-fluid">
+                {% else %}
+                    {# Placeholder de imagen si no hay ninguna #}
+                    <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}" class="img-fluid">
+                {% endif %}
+
+                <p>{{ service.description|linebreaksbr }}</p>
+
+                <h2>Proyectos Relacionados</h2>
+                <div class="row">
+                    {% for project in related_projects %}
+                        <div class="col-md-4 project-card">
+                            <a href="{% url 'projects:project_detail' project.slug %}">
+                                {% if project.main_image %}
+                                    <img src="{{ project.main_image.image.url }}" alt="{{ project.title }}" class="img-fluid">
+                                {% else %}
+                                    {# Placeholder de imagen si no hay ninguna #}
+                                    <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="img-fluid">
+                                {% endif %}
+                                <h3>{{ project.title }}</h3>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p class="no-projects-message">No hay proyectos relacionados con este servicio aún.</p>
+                    {% endfor %}
+                 </div>
+
+                <a href="{% url 'services:service_list' %}" class="btn btn-primary mt-4">Volver a Servicios</a>
+                <a href="{% url 'core:contact' %}" class="btn btn-secondary mt-4">Solicitar Presupuesto</a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

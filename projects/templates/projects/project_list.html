@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block content %}
+
+<section class="hero-section-projects">
+    <div class="hero-content">
+        <h1>Nuestras Obras Hablan por Nosotros</h1>
+        <p>Explora nuestros proyectos y descubre la calidad y dedicación que ponemos en cada obra.</p>
+    </div>
+</section>
+
+
+<section class="projects-section">
+    <div class="container">
+        <div class="filter-options">
+            <a href="{% url 'projects:project_list' %}" class="filter-button {% if not selected_categories %}active{% endif %}">Todos</a>
+            {% for category in categories %}
+                <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button {% if category.name in selected_categories %}active{% endif %}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="project-grid">
+            {% for project in project_list %}
+            <div class="project-item" data-categories="{% for category in project.categories.all %}{{ category.name }} {% endfor %}">
+                <a href="{% url 'projects:project_detail' project.slug %}">
+                    {% if project.images.first %} {# Usa la primera imagen como miniatura #}
+                        <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                        {# Placeholder de imagen si no hay ninguna #}
+                        <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}">
+                    {% endif %}
+                    <div class="project-overlay">
+                        <h3>{{ project.title }}</h3>
+                        <p>{{ project.short_description }}</p>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+                <p class="no-projects-message">No se encontraron proyectos en esta categoría.</p>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">« primera</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">anterior</a>
+                {% endif %}
+
+                <span class="current">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}">última »</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

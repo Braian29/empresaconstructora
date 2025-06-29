@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block content %}
+
+<section class="project-detail">
+    <div class="container">
+        <h1 class="project-title">{{ project.title }}</h1>
+
+        <div class="project-gallery">
+            {% for image in project.images.all %}
+                <img src="{{ image.image.url }}" alt="{{ project.title }} - Image {{ forloop.counter }}" class="project-image">
+            {% empty %}
+                <p>No hay imágenes disponibles para este proyecto.</p>
+                {# Placeholder de imagen si no hay ninguna #}
+                <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available" class="project-image">
+            {% endfor %}
+        </div>
+
+        <div class="project-info">
+            <p class="project-description">{{ project.detailed_description|linebreaksbr }}</p>
+
+            <div class="project-details">
+                <p><strong>Categorías:</strong> {% for category in project.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                {% if project.service_type %}<p><strong>Tipo de Servicio:</strong> {{ project.service_type }}</p>{% endif %}
+                {% if project.duration %}<p><strong>Duración del Proyecto:</strong> {{ project.duration }}</p>{% endif %}
+                {% if project.location %}<p><strong>Ubicación:</strong> {{ project.location }}</p>{% endif %}
+                {% if project.client %}<p><strong>Cliente:</strong> {{ project.client }}</p>{% endif %}
+                </div>
+
+            {% if project.client_testimonial_quote %}
+                <div class="project-testimonial">
+                    <blockquote>"{{ project.client_testimonial_quote|linebreaksbr }}"</blockquote>
+                    <p class="testimonial-author">— {% if project.client_testimonial_author %}{{ project.client_testimonial_author }}{% else %}Cliente Anónimo{% endif %}</p>
+                </div>
+            {% endif %}
+
+           <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Ver otros proyectos</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

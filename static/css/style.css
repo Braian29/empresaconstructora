@@ -1,0 +1,845 @@
+/* static/css/style.css */
+
+/* 1. Definición de Variables de Color (Basado en la paleta HEX) */
+:root {
+    --primary-red: #FB3535;          /* Rojo principal de acento */
+    --dark-text: #0E0E0E;            /* Negro oscuro para textos principales */
+    --medium-gray: #9E9E9E;          /* Gris medio para textos secundarios, bordes */
+    --light-blue-gray: #CCD4D4;      /* Gris azulado claro para fondos sutiles */
+    --warm-light-beige: #EED4D4;     /* Rosa/Beige claro para fondos cálidos */
+    --darker-red: #CA4C4C;           /* Rojo oscuro/terroso para hovers y acentos */
+    --white: #FFFFFF;                /* Blanco */
+    --whatsapp-green: #25D366;       /* Verde WhatsApp */
+}
+
+/* 2. Tipografía General */
+body {
+    font-family: 'Open Sans', sans-serif; /* Fuente para cuerpo de texto */
+    color: var(--dark-text); /* Color de texto por defecto */
+    line-height: 1.6;
+    background-color: var(--white); /* Fondo general blanco */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Oswald', sans-serif; /* Fuente para encabezados */
+    color: var(--dark-text);
+    margin-bottom: 0.5em;
+    font-weight: 700; /* Headers en negrita */
+}
+
+/* Tamaños de fuente para encabezados para una jerarquía visual clara */
+h1 { font-size: 3.5rem; } /* Muy grande, ideal para Hero Section */
+h2 { font-size: 2.5rem; }
+h3 { font-size: 2rem; }
+h4 { font-size: 1.5rem; }
+
+/* 3. Estilos Globales y Utilidades */
+a {
+    color: var(--primary-red);
+    text-decoration: none;
+    transition: color 0.3s ease; /* Transición suave para hovers */
+}
+
+a:hover {
+    color: var(--darker-red);
+    text-decoration: underline;
+}
+
+/* Estilos para Botones (CTAs) */
+.btn-primary-lework {
+    background-color: var(--primary-red);
+    color: var(--white);
+    border: 1px solid var(--primary-red);
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.3rem; /* Bordes ligeramente redondeados */
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Espaciado entre letras para mejor legibilidad en mayúsculas */
+}
+
+.btn-primary-lework:hover,
+.btn-primary-lework:focus {
+    background-color: var(--darker-red); /* Rojo oscuro en hover */
+    border-color: var(--darker-red);
+    color: var(--white);
+    box-shadow: none; /* Eliminar sombra predeterminada de Bootstrap en focus */
+}
+
+.btn-outline-lework {
+    background-color: transparent;
+    color: var(--primary-red);
+    border: 1px solid var(--primary-red);
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-outline-lework:hover,
+.btn-outline-lework:focus {
+    background-color: var(--primary-red); /* Relleno en hover */
+    color: var(--white);
+    border-color: var(--primary-red);
+    box-shadow: none;
+}
+
+/* Padding Estándar para Secciones */
+section {
+    padding: 80px 0; /* Mayor padding para un respiro visual */
+}
+
+/* 4. Header (Navbar) */
+.navbar {
+    background-color: var(--white) !important; /* Asegurar fondo blanco */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+    padding: 0.8rem 0; /* Ajustar padding */
+    transition: all 0.3s ease; /* Transición para si se vuelve pegajoso */
+}
+
+.navbar-brand img {
+    height: 55px; /* Ajustar altura del logo */
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+/* Estilos de los enlaces de navegación */
+.navbar-nav .nav-item .nav-link {
+    color: var(--dark-text); /* Color por defecto */
+    font-weight: 500; /* Peso de fuente medio */
+    padding: 0.7rem 1rem;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    position: relative; /* Para el efecto de subrayado personalizado */
+    text-transform: uppercase; /* Mayúsculas para los elementos de navegación */
+    letter-spacing: 0.03em;
+}
+
+/* Efecto de subrayado en hover y activo */
+.navbar-nav .nav-item .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Inicia desde el centro */
+    width: 0;
+    height: 3px; /* Grosor del subrayado */
+    background-color: var(--primary-red);
+    transition: all 0.3s ease-out;
+    transform: translateX(-50%); /* Centra el subrayado */
+}
+
+.navbar-nav .nav-item .nav-link:hover::after,
+.navbar-nav .nav-item .nav-link.active::after {
+    width: calc(100% - 20px); /* Ocupa casi todo el ancho con un pequeño margen */
+}
+
+.navbar-nav .nav-item .nav-link:hover,
+.navbar-nav .nav-item .nav-link.active {
+    color: var(--primary-red); /* Color de enlace activo/hover */
+}
+
+/* Estilo para el botón del toggler en móviles */
+.navbar-toggler {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba%2814, 14, 14, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+
+/* 5. Footer */
+.footer {
+    background-color: var(--dark-text); /* Fondo oscuro para el footer */
+    color: var(--light-blue-gray); /* Texto claro */
+    padding: 40px 0 20px 0; /* Ajustar padding */
+    font-size: 0.9rem;
+}
+
+.footer .logo-column {
+    display: flex;
+    justify-content: center; /* Centrar logo en todas las pantallas */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.footer .logo-column img {
+    height: 70px; /* Ajustar tamaño del logo del footer */
+    width: auto;
+}
+
+.footer .navigation-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap; /* Permitir que los ítems se envuelvan */
+    justify-content: center; /* Centrar ítems en desktop */
+}
+
+.footer .navigation-column li {
+    margin: 0 15px 10px 15px; /* Espaciado entre ítems de navegación */
+}
+
+.footer .navigation-column a {
+    color: var(--light-blue-gray);
+    font-weight: 400;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.footer .navigation-column a:hover {
+    color: var(--primary-red);
+    text-decoration: none;
+}
+
+.footer .contact-column p {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    line-height: 1.4;
+}
+
+.footer .contact-column p i {
+    margin-right: 10px;
+    color: var(--primary-red); /* Color del icono */
+    font-size: 1.1em;
+}
+
+.footer .contact-column a {
+    color: var(--light-blue-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer .contact-column a:hover {
+    color: var(--primary-red);
+}
+
+.footer .copyright-text { /* Estilo para el texto de copyright */
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* 6. Icono Flotante de WhatsApp */
+.whatsapp-icon {
+    position: fixed;
+    bottom: 25px; /* Más espacio desde abajo */
+    right: 25px; /* Más espacio desde la derecha */
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    width: 65px; /* Tamaño ligeramente más grande */
+    height: 65px;
+    background-color: var(--whatsapp-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más prominente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-icon:hover {
+    transform: translateY(-8px); /* Efecto de "levantar" en hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-icon i {
+    color: var(--white);
+    font-size: 2.5rem; /* Tamaño del icono de Font Awesome */
+}
+
+/* Asegurar que la imagen del WhatsApp original (si existe) esté oculta */
+.whatsapp-icon img {
+    display: none;
+}
+
+/* 7. Estilos para Secciones Específicas (Placeholders, para implementar en tus templates Django) */
+
+/* Hero Section (Home Page) */
+.hero-section {
+    position: relative;
+    height: 70vh; /* Altura de la sección principal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    /* Puedes usar una imagen de fondo dinámica aquí si lo manejas desde Django */
+    background: url("https://via.placeholder.com/1920x800/0E0E0E/FFFFFF?text=LEWORK+Hero+Image") no-repeat center center/cover; /* Imagen de fondo placeholder */
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro para legibilidad del texto */
+    background-blend-mode: multiply; /* Mezcla el overlay con la imagen */
+}
+
+.hero-content h1 {
+    color: var(--white);
+    font-size: 4rem; /* Título principal más grande */
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4); /* Sombra para mejor legibilidad */
+}
+
+.hero-content p {
+    color: var(--white);
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.hero-ctas .btn {
+    margin: 0 15px;
+    min-width: 200px;
+}
+
+/* Sección "Quiénes Somos" (Snippet en Home o página About) */
+.about-snippet, .about-page-content {
+    background-color: var(--warm-light-beige); /* Fondo cálido */
+    padding: 80px 0;
+    text-align: center;
+}
+.about-snippet h2, .about-page-content h2 {
+    color: var(--dark-text);
+    margin-bottom: 40px;
+}
+.about-snippet p, .about-page-content p {
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+    font-size: 1.15rem;
+    color: var(--dark-text);
+}
+
+/* Sección "Nuestros Servicios Destacados" */
+.featured-services {
+    padding: 80px 0;
+    background-color: var(--light-blue-gray); /* Un fondo sutil */
+    text-align: center;
+}
+.featured-services .service-card {
+    background-color: var(--white);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left; /* Contenido de la tarjeta alineado a la izquierda */
+}
+.featured-services .service-card:hover {
+    transform: translateY(-8px); /* Efecto de levantamiento */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+.featured-services .service-card i {
+    font-size: 3.5rem; /* Iconos más grandes */
+    color: var(--primary-red);
+    margin-bottom: 20px;
+}
+.featured-services .service-card h3 {
+    font-size: 1.7rem;
+    margin-bottom: 15px;
+    color: var(--dark-text);
+}
+.featured-services .service-card p {
+    color: var(--medium-gray);
+    flex-grow: 1; /* Permite que el párrafo ocupe el espacio disponible */
+    font-size: 1rem;
+}
+
+/* Sección "Proyectos Destacados" */
+.featured-projects {
+    padding: 80px 0;
+    background-color: var(--white);
+    text-align: center;
+}
+.featured-projects .project-item {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: block; /* Para que toda la tarjeta sea cliqueable */
+}
+.featured-projects .project-item img {
+    width: 100%;
+    height: 280px; /* Altura fija para uniformidad */
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.featured-projects .project-item:hover img {
+    transform: scale(1.08); /* Zoom sutil en la imagen */
+}
+.featured-projects .project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--dark-text), 0.75); /* Overlay oscuro con transparencia */
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease;
+    text-align: center;
+    padding: 20px;
+}
+.featured-projects .project-item:hover .project-overlay {
+    opacity: 1; /* Visible en hover */
+}
+.featured-projects .project-overlay h4 {
+    color: var(--white);
+    margin-bottom: 10px;
+    font-size: 1.7rem;
+}
+.featured-projects .project-overlay p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Sección "Nuestros Valores" */
+.our-values {
+    background-color: var(--warm-light-beige); /* Fondo cálido para los valores */
+    padding: 80px 0;
+    text-align: center;
+}
+.our-values .value-item {
+    margin-bottom: 30px;
+}
+.our-values .value-item i {
+    font-size: 3.5rem; /* Iconos de valores más grandes */
+    color: var(--primary-red);
+    margin-bottom: 20px;
+}
+.our-values .value-item h4 {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+}
+.our-values .value-item p {
+    color: var(--dark-text);
+    font-size: 1rem;
+}
+
+/* Sección Final CTA (Llamada a la acción) */
+.final-cta {
+    background-color: var(--primary-red);
+    color: var(--white);
+    padding: 100px 0; /* Mayor padding para destacar */
+    text-align: center;
+}
+.final-cta h2 {
+    color: var(--white);
+    font-size: 3rem;
+    margin-bottom: 40px;
+    line-height: 1.2;
+}
+.final-cta .btn-primary-lework {
+    background-color: var(--white); /* Botón blanco sobre fondo rojo */
+    color: var(--primary-red);
+    border-color: var(--white);
+    padding: 1rem 2.5rem; /* Botón más grande */
+    font-size: 1.2rem;
+}
+.final-cta .btn-primary-lework:hover {
+    background-color: var(--darker-red); /* Rojo oscuro en hover */
+    color: var(--white);
+    border-color: var(--darker-red);
+}
+
+/* Estilos para la Página de Contacto */
+.contact-form-section {
+    padding: 80px 0;
+    background-color: var(--white);
+}
+.contact-form-section h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.contact-form-section .form-control {
+    border-radius: 0.3rem;
+    border: 1px solid var(--medium-gray);
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 20px; /* Más espacio entre campos */
+}
+.contact-form-section .form-control:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 0.2rem rgba(251, 53, 53, 0.25); /* Sombra de focus sutil */
+}
+.contact-info-block {
+    background-color: var(--light-blue-gray);
+    padding: 40px; /* Mayor padding */
+    border-radius: 8px;
+    height: 100%; /* Ocupa toda la altura de la columna */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.contact-info-block p {
+    margin-bottom: 18px; /* Más espacio entre líneas de contacto */
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    color: var(--dark-text);
+}
+.contact-info-block p i {
+    margin-right: 15px;
+    font-size: 1.6rem; /* Iconos más grandes */
+    color: var(--primary-red);
+}
+.contact-info-block a {
+    color: var(--dark-text);
+    font-weight: 500;
+}
+.contact-info-block a:hover {
+    color: var(--primary-red);
+    text-decoration: none;
+}
+.contact-map {
+    margin-top: 40px; /* Espacio antes del mapa */
+}
+.contact-map iframe {
+    width: 100%;
+    height: 400px; /* Altura del mapa */
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para la Página "Quiénes Somos" */
+.about-page-content {
+    background-color: var(--warm-light-beige); /* Fondo cálido */
+    padding: 80px 0;
+}
+.about-page-content h2 {
+    margin-bottom: 40px;
+    text-align: center;
+}
+.about-page-content p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--dark-text);
+}
+.mission-vision-values {
+    margin-top: 40px;
+}
+.mission-vision-values .card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    background-color: var(--white);
+    padding: 30px;
+    text-align: center;
+}
+.mission-vision-values .card h4 {
+    color: var(--primary-red);
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+.mission-vision-values .card p {
+    font-size: 1rem;
+    color: var(--dark-text);
+}
+.team-section {
+    background-color: var(--light-blue-gray);
+    padding: 80px 0;
+    text-align: center;
+}
+.team-member-card {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+.team-member-card img {
+    width: 160px; /* Tamaño de imagen de perfil */
+    height: 160px;
+    border-radius: 50%; /* Circular */
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid var(--primary-red); /* Borde rojo */
+}
+.team-member-card h4 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+.team-member-card p {
+    color: var(--medium-gray);
+    font-size: 1rem;
+}
+
+/* Estilos para la Página de Servicios */
+.services-page-list {
+    padding: 80px 0;
+    background-color: var(--warm-light-beige);
+}
+.service-accordion .card {
+    border: none;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden; /* Para que el border-radius se aplique al contenido */
+}
+.service-accordion .card-header {
+    background-color: var(--primary-red);
+    padding: 0;
+    border-bottom: none;
+    cursor: pointer;
+}
+.service-accordion .card-header h2 button {
+    color: var(--white);
+    text-align: left;
+    font-size: 1.6rem;
+    padding: 1.2rem 2rem; /* Mayor padding para el botón del acordeón */
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    position: relative;
+    font-weight: 700;
+}
+.service-accordion .card-header h2 button:focus {
+    box-shadow: none;
+}
+/* Icono de Font Awesome para el acordeón (chevron-down) */
+.service-accordion .card-header h2 button::after {
+    content: '\f078'; /* Código del icono chevron-down (Font Awesome 6 Free) */
+    font-family: 'Font Awesome 6 Free'; /* Asegúrate de que esta fuente esté cargada */
+    font-weight: 900; /* Para el estilo 'solid' */
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s ease;
+}
+.service-accordion .card-header h2 button[aria-expanded="true"]::after {
+    transform: translateY(-50%) rotate(180deg); /* Gira el icono al expandirse */
+}
+
+.service-accordion .card-body {
+    background-color: var(--white);
+    padding: 2rem;
+    border: 1px solid var(--light-blue-gray);
+    border-top: none; /* No hay borde superior cuando está abierto */
+    border-radius: 0 0 8px 8px;
+    color: var(--dark-text);
+}
+.service-accordion .card-body ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0; /* Eliminar margen inferior si es el último elemento */
+}
+.service-accordion .card-body ul li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    font-size: 1rem;
+}
+.service-accordion .card-body ul li i {
+    margin-right: 12px;
+    color: var(--primary-red);
+    font-size: 1.2em;
+    line-height: 1.6; /* Alinea el icono con el texto */
+}
+
+/* Estilos para la Página de Proyectos (Galería) */
+.projects-page-gallery {
+    padding: 80px 0;
+    background-color: var(--light-blue-gray);
+}
+.projects-page-gallery .filters {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.projects-page-gallery .filters button {
+    background-color: var(--white);
+    color: var(--dark-text);
+    border: 1px solid var(--medium-gray);
+    padding: 10px 25px;
+    margin: 5px;
+    border-radius: 25px; /* Botones de filtro redondeados */
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+.projects-page-gallery .filters button:hover,
+.projects-page-gallery .filters button.active {
+    background-color: var(--primary-red);
+    color: var(--white);
+    border-color: var(--primary-red);
+}
+
+.project-grid .project-item-page {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: var(--white);
+    display: block; /* Hace que toda la tarjeta sea cliqueable */
+    color: inherit; /* Hereda el color del texto para los enlaces */
+    text-decoration: none; /* Quitar subrayado por defecto del enlace */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.project-grid .project-item-page img {
+    width: 100%;
+    height: 250px; /* Altura fija para la imagen del proyecto */
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid var(--light-blue-gray);
+}
+.project-grid .project-item-page .project-info {
+    padding: 20px;
+    text-align: left;
+}
+.project-grid .project-item-page .project-info h4 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    color: var(--dark-text);
+}
+.project-grid .project-item-page .project-info p {
+    font-size: 1rem;
+    color: var(--medium-gray);
+    margin-bottom: 0;
+}
+.project-grid .project-item-page:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px); /* Efecto de levantamiento */
+}
+
+/* Estilos para la Página de Detalle de Proyecto */
+.project-detail-section {
+    padding: 80px 0;
+    background-color: var(--warm-light-beige);
+}
+.project-detail-section h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--dark-text);
+}
+.project-gallery-carousel img {
+    max-height: 550px; /* Limitar altura de las imágenes del carrusel */
+    width: 100%;
+    object-fit: contain; /* Asegura que la imagen quepa sin recorte excesivo */
+    margin: 0 auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.project-details-text h3 {
+    color: var(--primary-red);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+.project-details-text p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--dark-text);
+}
+.project-info-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+.project-info-list li {
+    margin-bottom: 10px;
+    color: var(--dark-text);
+    font-size: 1.1rem;
+    display: flex; /* Para alinear el strong */
+    align-items: baseline;
+}
+.project-info-list li strong {
+    color: var(--primary-red);
+    margin-right: 10px;
+    min-width: 120px; /* Alinea los dos puntos */
+    display: inline-block;
+}
+
+/* 8. Ajustes Responsivos */
+@media (max-width: 992px) {
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2.2rem; }
+    .hero-content h1 { font-size: 3.5rem; }
+    .hero-content p { font-size: 1.2rem; }
+    .navbar-brand img { height: 45px; } /* Ajuste del logo en tabletas */
+    .navbar-nav .nav-item .nav-link {
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+    /* El subrayado en móvil debe ser de ancho completo */
+    .navbar-nav .nav-item .nav-link::after {
+        left: 0;
+        width: 100%;
+        transform: translateX(0);
+    }
+    .navbar-nav .nav-item .nav-link:hover::after,
+    .navbar-nav .nav-item .nav-link.active::after {
+        width: 100%;
+    }
+    .footer .navigation-column ul {
+        flex-direction: column; /* Apilar enlaces de navegación en móvil */
+        align-items: center;
+    }
+    .footer .navigation-column li {
+        margin: 5px 0;
+    }
+    .footer .logo-column,
+    .footer .contact-column {
+        text-align: center;
+    }
+    .footer .contact-column p {
+        justify-content: center; /* Centrar información de contacto en móvil */
+    }
+}
+
+@media (max-width: 767px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    .hero-section { height: 60vh; padding: 40px 0; }
+    .hero-content h1 { font-size: 2.8rem; }
+    .hero-content p { font-size: 1.1rem; margin-bottom: 2rem; }
+    section { padding: 50px 0; } /* Ajuste de padding general en móviles */
+
+    .whatsapp-icon {
+        width: 55px;
+        height: 55px;
+        bottom: 18px;
+        right: 18px;
+    }
+    .whatsapp-icon i {
+        font-size: 2.2rem;
+    }
+    .featured-services .service-card,
+    .featured-projects .project-item,
+    .team-member-card,
+    .mission-vision-values .card {
+        margin-bottom: 25px; /* Ajuste de márgenes en móvil */
+    }
+    .final-cta h2 { font-size: 2.2rem; }
+    .contact-info-block { margin-top: 30px; }
+}
+
+@media (max-width: 576px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.8rem; }
+    .hero-content h1 { font-size: 2.2rem; }
+    .hero-content p { font-size: 1rem; }
+    .hero-ctas .btn {
+        display: block; /* Botones apilados en pantallas muy pequeñas */
+        margin: 10px auto;
+        width: 80%; /* Ancho completo */
+    }
+}

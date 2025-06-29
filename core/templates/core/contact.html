@@ -1,0 +1,97 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block content %}
+
+    <section class="hero-section contact-hero">
+        <div class="container">
+            <h1>¿Hablemos de tu Proyecto?</h1>
+        </div>
+    </section>
+
+
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Formulario de Contacto</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {% for field in form %}
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {{ field.errors }}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                    </form>
+                </div>
+                <div class="col-md-6 contact-info">
+                    <h2>Información de Contacto</h2>
+                    {# Usamos contact_info que viene del context processor #}
+                    {% if contact_info %}
+                        <p>
+                            <i class="fas fa-phone"></i> <a href="tel:{{ contact_info.phone_number }}">{{ contact_info.phone_number }}</a><br> (También WhatsApp)
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope"></i> <a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a>
+                        </p>
+                        <p>
+                            <i class="fab fa-instagram"></i> <a href="{{ contact_info.instagram }}" target="_blank">Constructora Le Work</a>
+                        </p>
+                        {% if contact_info.address %}
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i> {{ contact_info.address }}
+                            </p>
+                        {% endif %}
+                        {% if contact_info.schedule %}
+                            <p>
+                                <i class="fas fa-clock"></i> {{ contact_info.schedule }}
+                            </p>
+                        {% endif %}
+                    {% else %}
+                        {# Fallback si no hay información de contacto #}
+                        <p>
+                            <i class="fas fa-phone"></i> <a href="tel:+5491126370364">+54 9 11 2637-0364</a><br> (También WhatsApp)
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope"></i> <a href="mailto:constructora.lework@hotmail.com">constructora.lework@hotmail.com</a>
+                        </p>
+                        <p>
+                            <i class="fab fa-instagram"></i> <a href="https://www.instagram.com/constructoralework/" target="_blank">Constructora Le Work</a>
+                        </p>
+                    {% endif %}
+
+                    <div id="map" style="height: 300px; width: 100%;"></div>
+
+                    <p>Estamos listos para escuchar tus ideas y transformar tus sueños en realidad. Nos pondremos en contacto a la brevedad.</p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: {% if contact_info.latitude %}{{ contact_info.latitude }}{% else %}-34.603722{% endif %}, lng: {% if contact_info.longitude %}{{ contact_info.longitude }}{% else %}-58.381592{% endif %} },  // Buenos Aires (adjust as needed)
+                zoom: 14,
+            });
+
+            {% if contact_info.latitude and contact_info.longitude %}
+                 new google.maps.Marker({
+                    position: { lat: {{ contact_info.latitude }}, lng: {{ contact_info.longitude }} },
+                    map: map,
+                    title: "LE WORK Constructora",
+                });
+            {% endif %}
+        }
+
+        window.initMap = initMap; // Expose to global scope for Google Maps API callback
+    </script>
+    {# Recuerda reemplazar YOUR_GOOGLE_MAPS_API_KEY con tu clave real #}
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+
+{% endblock %}

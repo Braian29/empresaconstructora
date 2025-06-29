@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {# FIX: Cambiado de 'core/base.html' a 'base.html' #}
+{% load static %}
+
+{% block title %}Quiénes Somos | LE WORK Constructora{% endblock %}
+
+{% block content %}
+
+    <section class="hero-section about-hero">
+        <div class="hero-content">
+            {# Usar el título del objeto AboutUs si está disponible, sino el hardcodeado #}
+            <h1>{% if about_us %}{{ about_us.title }}{% else %}Nuestra Historia, Nuestro Compromiso.{% endif %}</h1>
+        </div>
+    </section>
+
+    <section class="about-us-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>¿Quiénes Somos?</h2>
+                    {# Usar 'main_content' pasado desde la vista, aplicando linebreaks #}
+                    <p>{% if main_content %}{{ main_content|linebreaksbr }}{% else %}No hay contenido principal para la sección Quiénes Somos.{% endif %}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Misión</h2>
+                    {# Usar 'mission' pasado desde la vista, aplicando linebreaks #}
+                    <p>{% if mission %}{{ mission|linebreaksbr }}{% else %}No hay misión configurada.{% endif %}</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Visión</h2>
+                    {# Usar 'vision' pasado desde la vista, aplicando linebreaks #}
+                    <p>{% if vision %}{{ vision|linebreaksbr }}{% else %}No hay visión configurada.{% endif %}</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Valores</h2>
+                    <ul>
+                        {# Iterar sobre 'values' y usar 'value.name' y 'value.icon' #}
+                        {% for value in values %}
+                            <li>
+                                {% if value.icon %}
+                                    <img src="{{ value.icon.url }}" alt="{{ value.name }} Icon" class="value-icon">
+                                {% else %}
+                                    {# Opción para un ícono genérico si no hay imagen (ej. FontAwesome) #}
+                                    <i class="fas fa-check-circle value-icon"></i>
+                                {% endif %}
+                                {{ value.name }}
+                            </li>
+                        {% empty %}
+                            <li>No hay valores configurados.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>El Equipo</h2>
+                    <div class="team-members">
+                        {% for member in team_members %}
+                            <div class="team-member">
+                                {% if member.image %}
+                                    <img src="{{ member.image.url }}" alt="{{ member.name }}" class="team-member-image">
+                                {% else %}
+                                    {# Placeholder si no hay imagen de miembro #}
+                                    <img src="{% static 'core/img/team_placeholder.jpg' %}" alt="Imagen de equipo no disponible" class="team-member-image">
+                                {% endif %}
+                                <h3>{{ member.name }}</h3>
+                                <p>{{ member.title }}</p>
+                                {% if member.bio %}
+                                    <p class="member-bio">{{ member.bio|truncatechars:100 }}</p>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <p>No hay miembros del equipo configurados.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Testimonios</h2>
+                    <div class="testimonials-container">
+                        {% for testimonial in testimonials %}
+                            <div class="testimonial">
+                                {% if testimonial.image %}
+                                    <img src="{{ testimonial.image.url }}" alt="{{ testimonial.client_name }}" class="testimonial-image">
+                                {% endif %}
+                                <p>"{{ testimonial.content|linebreaksbr }}"</p>
+                                <p class="testimonial-author">— {{ testimonial.client_name }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No hay testimonios configurados para esta sección.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

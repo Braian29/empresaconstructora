@@ -1,0 +1,135 @@
+{# C:/Users/braia/OneDrive/Escritorio/Aplicaciones_P/Empresa_Constructora/core/templates/core/home_sections.html #}
+{% load static %} {# Es crucial cargar el tag static aquí también si se usa dentro #}
+
+<!-- Sección "Quiénes Somos" (Snippet para el Home) -->
+<section class="home-about-us section-spacing">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-7">
+                {% if about_us_snippet %}
+                    <h2 class="section-title">{{ about_us_snippet.title }}</h2>
+                    <p class="lead">{{ about_us_snippet.main_content|truncatewords:80|linebreaksbr }}</p>
+                    <p>{{ about_us_snippet.mission|truncatewords:30 }}</p> {# Opcional: mostrar misión resumida #}
+                    <a href="{% url 'about:about' %}" class="btn btn-secondary">Conoce más sobre nosotros <i class="fas fa-arrow-right"></i></a>
+                {% else %}
+                    <h2 class="section-title">Sobre Nosotros</h2>
+                    <p class="lead">Información "Quiénes Somos" no disponible. Por favor, añádela en el panel de administración para que aparezca aquí.</p>
+                    <a href="{% url 'about:about' %}" class="btn btn-secondary">Visitar página completa <i class="fas fa-arrow-right"></i></a>
+                {% endif %}
+            </div>
+            <div class="col-md-5 text-center">
+                {# Podrías poner una imagen representativa de la empresa aquí #}
+                <img src="{% static 'core/img/about_home_placeholder.jpg' %}" alt="LE WORK Constructora" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+
+        {% if values %}
+            <h3 class="mt-5 text-center">Nuestros Valores Fundamentales</h3>
+            <div class="row justify-content-center values-grid mt-4">
+                {% for value in values|slice:":3" %} {# Muestra solo los primeros 3 valores, si hay muchos #}
+                    <div class="col-md-4 mb-4">
+                        <div class="value-item text-center p-4 border rounded shadow-sm">
+                            {% if value.icon %}
+                                <img src="{{ value.icon.url }}" alt="{{ value.name }} Icon" class="value-icon mb-3">
+                            {% else %}
+                                <i class="fas fa-star fa-3x mb-3 text-primary"></i> {# Icono genérico #}
+                            {% endif %}
+                            <h4>{{ value.name }}</h4>
+                            <p>{{ value.description|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Sección de Servicios Destacados -->
+<section class="home-services bg-light section-spacing">
+    <div class="container">
+        <h2 class="section-title text-center">Nuestros Servicios Principales</h2>
+        <p class="text-center lead mb-5">Explora las áreas en las que somos expertos.</p>
+        <div class="row services-grid">
+            {% for service_category in featured_services %} {# La vista pasa ServiceCategory objetos #}
+                <div class="col-md-4 mb-4">
+                    <div class="service-item text-center p-4 border rounded shadow-sm">
+                        {% if service_category.icon %}
+                            <img src="{{ service_category.icon.url }}" alt="{{ service_category.name }} Icon" class="service-icon mb-3">
+                        {% else %}
+                            <i class="fas fa-cogs fa-3x mb-3 text-info"></i> {# Icono genérico #}
+                        {% endif %}
+                        <h4>{{ service_category.name }}</h4>
+                        <p>{{ service_category.description|truncatewords:25 }}</p>
+                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="btn btn-outline-info btn-sm">Ver Servicios <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No hay categorías de servicios destacadas. Por favor, añádelas en el panel de administración.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'services:service_list' %}" class="btn btn-primary">Ver todos los Servicios <i class="fas fa-long-arrow-alt-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Proyectos Recientes -->
+<section class="home-projects section-spacing">
+    <div class="container">
+        <h2 class="section-title text-center">Proyectos Recientes</h2>
+        <p class="text-center lead mb-5">Un vistazo a nuestras últimas construcciones y remodelaciones.</p>
+        <div class="row projects-grid">
+            {% for project in featured_projects %}
+                <div class="col-md-4 mb-4">
+                    <div class="project-item border rounded shadow-sm">
+                        <a href="{% url 'projects:project_detail' project.slug %}">
+                            {% if project.images.first %}
+                                <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}" class="img-fluid rounded-top">
+                            {% else %}
+                                <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="img-fluid rounded-top">
+                            {% endif %}
+                            <div class="p-3">
+                                <h5>{{ project.title }}</h5>
+                                <p class="text-muted">{{ project.short_description|truncatewords:15 }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No hay proyectos destacados. Por favor, añádelos en el panel de administración.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'projects:project_list' %}" class="btn btn-primary">Explorar todos los Proyectos <i class="fas fa-long-arrow-alt-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Testimonios (Opcional si hay testimonios principales, de lo contrario se sacaría) -->
+{# Puedes integrar aquí algunos testimonios principales si AboutUs los tiene destacados #}
+{# Por ejemplo, si pasas `testimonials` en el contexto de home view (actualmente no lo haces) #}
+{% comment %}
+<section class="home-testimonials bg-light section-spacing">
+    <div class="container">
+        <h2 class="section-title text-center">Lo que Nuestros Clientes Dicen</h2>
+        <div class="row justify-content-center">
+            {% for testimonial in main_testimonials_for_home %} {# Necesitarías pasar esta variable desde la vista #}
+                <div class="col-md-6 mb-4">
+                    <div class="testimonial-card p-4 border rounded shadow-sm">
+                        <p class="lead">"{{ testimonial.content|truncatewords:50 }}"</p>
+                        <p class="text-right font-weight-bold">— {{ testimonial.client_name }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No hay testimonios para mostrar en la página de inicio.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endcomment %}
