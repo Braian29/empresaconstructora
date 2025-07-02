@@ -5,74 +5,518 @@
     Este es un fragmento de plantilla diseñado para el sitio web de la empresa de construcciones más grande de Argentina.
     Utiliza Tailwind CSS para el estilizado y Django para la lógica de contenido dinámico.
 
-    Recomendaciones clave implementadas:
-    1.  **Animaciones "animate-on-scroll" refactorizadas:** El estado inicial (oculto y desplazado) se define en CSS,
-        y JavaScript solo añade una clase "is-visible" para activar la transición. Esto mejora la performance y la robustez.
-        -> Asegúrate de incluir el CSS proporcionado en tu hoja de estilos principal.
-    2.  **Lazy Loading de Imágenes:** Se ha añadido `loading="lazy"` a todas las imágenes que no están en el viewport inicial
-        para optimizar la carga.
-    3.  **Consistencia de Íconos:** Se ha unificado el uso de `fas fa-long-arrow-alt-right` para los botones de acción
-        principal, manteniendo `fas fa-phone-alt` para el botón de contacto por su especificidad.
-    4.  **Mensajes de "Contenido No Disponible":** Se han mejorado y unificado los mensajes para cuando no hay datos
-        disponibles en el CMS para una sección (e.g., valores, servicios destacados, proyectos).
+    NUEVAS MEJORAS IMPLEMENTADAS:
+    1. **Animaciones Avanzadas:** Sistema de animaciones sofisticadas con efectos parallax, staggered y morfing
+    2. **Efectos Visuales Premium:** Partículas flotantes, ondas animadas, brillos y gradientes dinámicos
+    3. **Interacciones Avanzadas:** Hover effects con transformaciones 3D y efectos de brillo
+    4. **Contadores Animados:** Números que se animan al entrar en viewport
+    5. **Efectos de Texto:** Revelado progresivo, escritura automática y brillos
+    6. **Performance Optimizada:** Transiciones con easing avanzado y will-change properties
 -->
 
-<!-- CSS necesario para las animaciones "animate-on-scroll" (Colocar en tu archivo CSS principal) -->
+<!-- CSS AVANZADO para animaciones premium -->
 <style>
+    /* Partículas flotantes de fondo */
+    .floating-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        /* Azul original (59, 130, 246) -> Rojo principal (251, 53, 53) */
+        background: rgba(251, 53, 53, 0.4); 
+        border-radius: 50%;
+        animation: float 25s infinite linear;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(100vh) rotate(0deg) scale(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+            transform: translateY(90vh) rotate(36deg) scale(1);
+        }
+        90% {
+            opacity: 1;
+            transform: translateY(10vh) rotate(324deg) scale(1);
+        }
+        100% {
+            transform: translateY(-10vh) rotate(360deg) scale(0);
+            opacity: 0;
+        }
+    }
+
+    /* Animaciones base mejoradas */
     .animate-on-scroll {
-        /* Estado inicial: oculto y ligeramente desplazado hacia abajo */
         opacity: 0;
-        transform: translateY(1.5rem); /* Equivalente a translate-y-6 */
-        /* Transición para la animación de entrada */
-        transition: opacity 700ms ease-out, transform 700ms ease-out;
-        will-change: opacity, transform; /* Sugerencia para el navegador para optimizar la animación */
+        transform: translateY(2rem) scale(0.95);
+        transition: all 900ms cubic-bezier(0.165, 0.84, 0.44, 1);
+        will-change: opacity, transform;
     }
 
     .animate-on-scroll.is-visible {
-        /* Estado final: completamente visible y en su posición original */
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+    }
+
+    /* Animaciones direccionales avanzadas */
+    .slide-in-left {
+        opacity: 0;
+        transform: translateX(-4rem) rotate(-3deg) scale(0.9);
+        transition: all 1000ms cubic-bezier(0.23, 1, 0.32, 1);
+        will-change: opacity, transform;
+    }
+
+    .slide-in-left.is-visible {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg) scale(1);
+    }
+
+    .slide-in-right {
+        opacity: 0;
+        transform: translateX(4rem) rotate(3deg) scale(0.9);
+        transition: all 1000ms cubic-bezier(0.23, 1, 0.32, 1);
+        will-change: opacity, transform;
+    }
+
+    .slide-in-right.is-visible {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg) scale(1);
+    }
+
+    .slide-in-up {
+        opacity: 0;
+        transform: translateY(3rem) scale(0.8);
+        transition: all 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        will-change: opacity, transform;
+    }
+
+    .slide-in-up.is-visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    /* Efecto de revelado progresivo para texto */
+    .reveal-text {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .reveal-text::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* Azul original (59, 130, 246) -> Rojo principal (251, 53, 53) */
+        background: linear-gradient(90deg, transparent, rgba(251, 53, 53, 0.8), transparent);
+        transform: translateX(-100%);
+        transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        z-index: 1;
+    }
+
+    .reveal-text.is-visible::before {
+        transform: translateX(100%);
+    }
+
+    /* Efectos hover avanzados */
+    .advanced-hover {
+        position: relative;
+        overflow: hidden;
+        transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        will-change: transform;
+    }
+
+    .advanced-hover::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); /* Mantener blanco para efecto de brillo general */
+        transition: left 700ms ease-in-out;
+        z-index: 1;
+    }
+
+    .advanced-hover:hover::before {
+        left: 100%;
+    }
+
+    .advanced-hover:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    }
+
+    /* Efecto parallax */
+    .parallax-element {
+        transition: transform 0.1s ease-out;
+        will-change: transform;
+    }
+
+    /* Contador animado */
+    .counter {
+        font-variant-numeric: tabular-nums;
+        transition: all 0.3s ease;
+    }
+
+    /* Efecto de brillo en textos importantes */
+    .text-shine {
+        /* Degradado de colores: (dark grey, blue, purple, dark grey) -> (black, primary red, darker red, black) */
+        background: linear-gradient(45deg, #0E0E0E, #FB3535, #CA4C4C, #0E0E0E);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s ease-in-out infinite;
+    }
+
+    @keyframes shine {
+        0%, 100% { background-position: 300% 300%; }
+        50% { background-position: -300% -300%; }
+    }
+
+    /* Ondas de fondo animadas */
+    .wave-bg {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .wave-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* Azul original (59,130,246,0.08) -> Gris claro/azul (204,212,212,0.08) */
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M0,10 Q25,0 50,10 T100,10 V20 H0 Z' fill='rgba(204,212,212,0.08)'/%3E%3C/svg%3E");
+        background-size: 200px 60px;
+        animation: wave 25s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes wave {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-200px); }
+    }
+
+    /* Barras de progreso animadas */
+    .progress-bar {
+        position: relative;
+        height: 4px;
+        /* Azul original (59, 130, 246, 0.1) -> Gris claro/azul (204, 212, 212, 0.1) */
+        background: rgba(204, 212, 212, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        /* Degradado de colores: (blue, purple, cyan) -> (primary red, darker red, light grey/blue) */
+        background: linear-gradient(90deg, #FB3535, #CA4C4C, #CCD4D4);
+        background-size: 200% 100%;
+        border-radius: 2px;
+        transform: translateX(-100%);
+        transition: transform 2s cubic-bezier(0.23, 1, 0.32, 1);
+        animation: progressShine 3s ease-in-out infinite;
+    }
+
+    .progress-fill.animate {
+        transform: translateX(0);
+    }
+
+    @keyframes progressShine {
+        0%, 100% { background-position: 200% 0; }
+        50% { background-position: -200% 0; }
+    }
+
+    /* Efectos de morphing para botones */
+    .morph-button {
+        position: relative;
+        overflow: hidden;
+        transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .morph-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: rgba(255, 255, 255, 0.2); /* Mantener blanco para un brillo suave */
+        border-radius: 50%;
+        transition: all 600ms cubic-bezier(0.23, 1, 0.32, 1);
+        transform: translate(-50%, -50%);
+    }
+
+    .morph-button:hover::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* Animación de typing para textos especiales */
+    .typewriter {
+        overflow: hidden;
+        /* Azul original (3b82f6) -> Rojo principal (FB3535) */
+        border-right: 3px solid #FB3535;
+        white-space: nowrap;
+        animation: typing 4s steps(50, end), blink-caret 1s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        /* Azul original (3b82f6) -> Rojo principal (FB3535) */
+        50% { border-color: #FB3535 }
+    }
+
+    /* Efectos de pulsación para elementos importantes */
+    .pulse-glow {
+        animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% {
+            /* Azul original (59, 130, 246) -> Rojo principal (251, 53, 53) */
+            box-shadow: 0 0 20px rgba(251, 53, 53, 0.3);
+        }
+        50% {
+            /* Azul original (59, 130, 246) -> Rojo principal (251, 53, 53) */
+            box-shadow: 0 0 40px rgba(251, 53, 53, 0.6);
+        }
+    }
+
+    /* Elementos decorativos flotantes */
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        /* Degradado de colores: (blue, purple) -> (primary red, darker red/brown) */
+        background: linear-gradient(45deg, rgba(251, 53, 53, 0.1), rgba(202, 76, 76, 0.1));
+        animation: floatShape 20s ease-in-out infinite;
+    }
+
+    @keyframes floatShape {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-20px) rotate(120deg); }
+        66% { transform: translateY(10px) rotate(240deg); }
+    }
+
+    /* Mejoras responsivas */
+    @media (max-width: 768px) {
+        .advanced-hover:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .particle {
+            width: 2px;
+            height: 2px;
+        }
+    }
+
+    /* Reducir animaciones para usuarios que prefieren menos movimiento */
+    @media (prefers-reduced-motion: reduce) {
+        .animate-on-scroll,
+        .slide-in-left,
+        .slide-in-right,
+        .slide-in-up,
+        .advanced-hover,
+        .morph-button {
+            transition: opacity 0.3s ease;
+        }
+        
+        .particle,
+        .wave-bg::before,
+        .text-shine,
+        .floating-shape {
+            animation: none;
+        }
     }
 </style>
 
-<!-- Sección "Quiénes Somos" -->
-    {% include 'core/home_sections_quienes.html' %}
+<!-- Partículas flotantes de fondo -->
+<div class="floating-particles" id="particles"></div>
 
+<!-- Sección "Quiénes Somos" -->
+<div class="relative wave-bg">
+    {% include 'core/home_sections_quienes.html' %}
+    <!-- Elementos decorativos flotantes -->
+    <div class="floating-shape w-20 h-20 top-10 left-10"></div>
+    <div class="floating-shape w-32 h-32 bottom-20 right-20" style="animation-delay: -10s;"></div>
+</div>
 
 <!-- Sección de Servicios Destacados -->
+<div class="relative">
     {% include 'core/home_sections_servicios.html' %}
-
+    <!-- Elementos decorativos con parallax -->
+    <!-- bg-blue-200 -> bg-[#CCD4D4] (Light Grey/Blue) -->
+    <div class="absolute top-20 left-10 w-16 h-16 bg-[#CCD4D4] rounded-full opacity-30 parallax-element" data-speed="0.5"></div>
+    <!-- bg-purple-200 -> bg-[#CA4C4C] (Darker Red/Brown) -->
+    <div class="absolute bottom-20 right-10 w-24 h-24 bg-[#CA4C4C] rounded-full opacity-30 parallax-element" data-speed="0.3"></div>
+</div>
 
 <!-- Sección de Proyectos Recientes -->
+<div class="relative wave-bg">
     {% include 'core/home_sections_proyectos.html' %}
-
+</div>
 
 <!-- Sección Final CTA -->
+<div class="relative">
     {% include 'core/home_sections_final.html' %}
+    <!-- Elementos decorativos finales -->
+    <div class="floating-shape w-28 h-28 top-1/2 left-5 opacity-50" style="animation-delay: -5s;"></div>
+</div>
 
-
-<!-- SCRIPT DE ANIMACIÓN SCROLL (Refactorizado para usar la clase 'is-visible') -->
+<!-- SCRIPTS AVANZADOS DE ANIMACIÓN -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-
+    // Sistema de animaciones mejorado
+    const animatedElements = document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right, .slide-in-up, .reveal-text');
+    
     const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                // Añadir la clase 'is-visible' para activar la animación definida en CSS
-                entry.target.classList.add('is-visible');
-                // Dejar de observar el elemento una vez que se ha animado
+                // Añadir delay staggered para múltiples elementos
+                setTimeout(() => {
+                    entry.target.classList.add('is-visible');
+                    
+                    // Activar barras de progreso si existen
+                    const progressBars = entry.target.querySelectorAll('.progress-fill');
+                    progressBars.forEach(bar => bar.classList.add('animate'));
+                    
+                    // Iniciar contadores animados si existen
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => animateCounter(counter));
+                    
+                }, index * 100); // Delay staggered de 100ms entre elementos
+                
                 observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.15 // El 15% del elemento debe estar visible para activar la animación
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     });
 
-    // Iniciar la observación de todos los elementos con la clase 'animate-on-scroll'
-    // El estado inicial (oculto y desplazado) es manejado por el CSS.
-    animatedElements.forEach(el => {
-        observer.observe(el);
+    animatedElements.forEach(el => observer.observe(el));
+
+    // Generador de partículas flotantes
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        if (!particlesContainer) return;
+        
+        const particleCount = window.innerWidth > 768 ? 15 : 8;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 25 + 's';
+            particle.style.animationDuration = (20 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Efecto parallax mejorado
+    function handleParallax() {
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        const scrollTop = window.pageYOffset;
+        
+        parallaxElements.forEach(element => {
+            const speed = element.dataset.speed || 0.5;
+            const yPos = -(scrollTop * speed);
+            element.style.transform = `translate3d(0, ${yPos}px, 0)`;
+        });
+    }
+
+    // Contador animado mejorado
+    function animateCounter(element) {
+        const target = parseInt(element.dataset.target);
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current);
+        }, 16);
+    }
+
+    // Efecto de hover mejorado para elementos con clase advanced-hover
+    document.querySelectorAll('.advanced-hover').forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px) scale(1.03)';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
     });
+
+    // Inicializar efectos
+    createParticles();
+    
+    // Event listeners optimizados
+    let ticking = false;
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                handleParallax();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Limpiar partículas en resize para evitar acumulación
+    window.addEventListener('resize', () => {
+        const particlesContainer = document.getElementById('particles');
+        if (particlesContainer) {
+            particlesContainer.innerHTML = '';
+            setTimeout(createParticles, 100);
+        }
+    });
+
+    // Detección de elementos en viewport para animaciones adicionales
+    const additionalObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Añadir clase para animaciones CSS adicionales
+                entry.target.classList.add('in-view');
+                
+                // Efectos especiales para ciertos elementos
+                if (entry.target.classList.contains('pulse-glow')) {
+                    entry.target.style.animation = 'pulseGlow 3s ease-in-out infinite';
+                }
+            }
+        });
+    }, { threshold: 0.3 });
+
+    // Observar elementos especiales
+    document.querySelectorAll('.pulse-glow, .morph-button').forEach(el => {
+        additionalObserver.observe(el);
+    });
+
+    console.log('🚀 Animaciones avanzadas iniciadas correctamente');
 });
 </script>

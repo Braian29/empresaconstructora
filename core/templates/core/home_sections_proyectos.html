@@ -1,0 +1,36 @@
+{% load static %}
+
+<!-- Sección de Proyectos Recientes -->
+<section class="py-20 bg-neutral-pink-light animate-on-scroll">
+    <div class="container mx-auto px-6 lg:px-8">
+        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-7 leading-tight tracking-tight">Proyectos Recientes</h2>
+        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">Un vistazo a nuestras últimas construcciones y remodelaciones, reflejo de nuestra experiencia, dedicación y atención al detalle.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+            {% for project in featured_projects %}
+                <div class="group w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary-300/50 animate-on-scroll">
+                    <a href="{% url 'projects:project_detail' project.slug %}" aria-label="Ver detalles del proyecto {{ project.title }}">
+                        {% if project.images.first %}
+                            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen de portada del proyecto" class="w-full h-64 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                        {% else %}
+                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="Imagen de proyecto no disponible para {{ project.title }}" class="w-full h-64 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                        {% endif %}
+                        <div class="p-8">
+                            <h5 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ project.title }}</h5>
+                            <p class="text-neutral-gray text-base">{{ project.short_description|truncatewords:15 }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
+                    <p class="text-xl text-neutral-dark font-semibold mb-3">Parece que no hay proyectos destacados disponibles en este momento.</p>
+                    <p class="text-lg text-neutral-gray">¡Estamos trabajando en cosas geniales! Vuelva pronto o visite nuestra página de Proyectos para actualizaciones.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-16">
+            <a href="{% url 'projects:project_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los proyectos realizados por LE WORK Constructora">
+                Explorar todos los Proyectos <i class="fas fa-long-arrow-alt-right ml-3"></i>
+            </a>
+        </div>
+    </div>
+</section>

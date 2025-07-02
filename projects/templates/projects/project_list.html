@@ -3,85 +3,165 @@
 
 {% block title %}Proyectos | LE WORK Constructora{% endblock %}
 
+{# BLOQUE: extra_head - Añade CSS y precargas importantes para rendimiento y efectos #}
+{% block extra_head %}
+    <!-- Preconectar para Google Fonts para un mejor rendimiento de carga -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Precargar la fuente Oswald para evitar parpadeos (FOUT/FOIT) -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="preload" as="font" crossorigin>
+    <!-- Incluir AOS CSS para animaciones al hacer scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Definición de keyframes para animaciones sutiles del Hero */
+        @keyframes fadeInMoveUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInMoveUp 0.8s ease-out forwards;
+            opacity: 0; /* Asegura que el elemento esté oculto antes de que empiece la animación */
+        }
+        /* Clases de retraso para el hero text, aplicadas directamente */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+{% endblock %}
+
+
 {% block content %}
 
-<!-- Hero Section para la Página de Proyectos -->
-<section class="w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white shadow-xl"> {# Fondo oscuro para impacto, altura responsiva #}
-    <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 drop-shadow-md">Nuestras Obras Hablan por Nosotros</h1>
-        <p class="text-lg md:text-xl font-light drop-shadow-sm max-w-2xl mx-auto">Explora nuestros proyectos y descubre la calidad, la innovación y la dedicación que ponemos en cada obra que emprendemos.</p> {# Subtítulo descriptivo #}
+<!-- HERO SECTION: Mejorado con fondo dinámico, overlay y animaciones de texto -->
+<section class="relative w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white overflow-hidden shadow-xl">
+    <!-- Capa de imagen de fondo con efecto parallax sutil -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out z-0"
+         style="background-image: url('{% static 'core/img/hero_projects_bg.jpg' %}');"
+         data-parallax-speed="0.2"> {# Data attribute para el script JS de parallax #}
+        <!-- Overlay oscuro para asegurar la legibilidad del texto blanco sobre la imagen -->
+        <div class="absolute inset-0 bg-brand-dark opacity-60"></div>
+    </div>
+    <!-- Contenido del Hero: Centrado y con animaciones de entrada escalonadas -->
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 animate-fade-in-up">
+            Nuestras Obras Hablan por Nosotros
+        </h1>
+        <p class="text-lg md:text-xl font-light max-w-2xl mx-auto animate-fade-in-up delay-200">
+            Explora nuestros proyectos y descubre la calidad, la innovación y la dedicación que ponemos en cada obra que emprendemos.
+        </p>
     </div>
 </section>
 
-<!-- Sección Principal de Proyectos -->
-<section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
+<!-- SECCIÓN PRINCIPAL DE PROYECTOS -->
+<section class="py-16 md:py-20 bg-brand-light-blue-gray">
     <div class="container mx-auto px-4 lg:px-8">
-        <!-- Opciones de Filtro -->
-        <div class="filter-options flex flex-wrap justify-center gap-4 mb-12 p-4 bg-white rounded-xl shadow-lg"> {# Contenedor de filtros con fondo, redondeado y sombra #}
-            <a href="{% url 'projects:project_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
-                {% if not selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
-                focus:outline-none focus:ring-2 focus:ring-primary-300">
-                Todos
-            </a>
-            {% for category in categories %}
-                <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
-                    {% if category.name in selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
-                    focus:outline-none focus:ring-2 focus:ring-primary-300">
-                    {{ category.name }}
+
+        <!-- BREADCRUMBS: Para una mejor navegación y contextualización del usuario -->
+        <nav class="mb-8 text-brand-gray" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                {# CORRECCIÓN AQUÍ: Cambiado {% url 'home' %} por la ruta estática '/' #}
+                <li><a href="/" class="hover:underline text-primary-500 transition-colors duration-200">Inicio</a></li>
+                <li class="text-brand-gray">/</li>
+                <li aria-current="page" class="font-semibold text-brand-dark">Proyectos</li>
+            </ol>
+        </nav>
+
+        <!-- OPCIONES DE FILTRO: Mejoradas con posición sticky y microinteracciones -->
+        <div class="sticky top-0 z-40 bg-brand-light-blue-gray py-4 md:py-6 -mx-4 md:-mx-8 lg:px-0"> {# Margen negativo para extender el fondo, padding para el contenido #}
+            <div class="container mx-auto px-4 lg:px-8 filter-options flex flex-wrap justify-center gap-4 p-4 bg-white rounded-xl shadow-lg">
+                <a href="{% url 'projects:project_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                    {% if not selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                    focus:outline-none focus:ring-2 focus:ring-primary-300 active:scale-95"> {# Añadido active:scale-95 para microinteracción #}
+                    Todos
                 </a>
-            {% endfor %}
+                {% for category in categories %}
+                    <a href="{% url 'projects:project_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                        {% if category.name in selected_categories %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                        focus:outline-none focus:ring-2 focus:ring-primary-300 active:scale-95">
+                        {{ category.name }}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- Cuadrícula de Proyectos -->
-        <div class="project-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center"> {# Grid responsivo #}
+        <!-- CUADRÍCULA DE PROYECTOS: Con animaciones al scroll, mejoras en tarjetas y lazy loading -->
+        <div class="project-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center mt-12">
             {% for project in project_list %}
-            <div class="group w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"> {# Card de proyecto con hover effect #}
+            {# Se añade la clase 'project-card-item' para que JavaScript pueda seleccionarlas #}
+            {# 'data-aos-delay' se establecerá dinámicamente con JavaScript #}
+            <div class="project-card-item group relative w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"
+                 data-aos="fade-up" data-aos-duration="800"> {# Eliminado el forloop.counter0|mul:100 de aquí #}
                 <a href="{% url 'projects:project_detail' project.slug %}" aria-label="Ver detalles de {{ project.title }}">
-                    {% if project.images.first %} {# Usa la primera imagen como miniatura #}
-                        <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen principal" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"> {# Imagen con altura fija y zoom en hover #}
-                    {% else %}
-                        <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105">
-                    {% endif %}
+                    <div class="relative overflow-hidden">
+                        {% if project.images.first %} {# Usa la primera imagen como miniatura #}
+                            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen principal"
+                                 class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                 loading="lazy"> {# Lazy loading para rendimiento #}
+                        {% else %}
+                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}"
+                                 class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                 loading="lazy">
+                        {% endif %}
+                        {# Overlay de color y icono de "ver" que aparecen en hover, indicando interactividad #}
+                        <div class="absolute inset-0 bg-primary-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 flex items-center justify-center">
+                            <svg class="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="p-6"> {# Padding para el contenido #}
                         <h3 class="text-xl font-oswald font-semibold text-brand-dark mb-2">{{ project.title }}</h3>
                         <p class="text-brand-gray text-sm">{{ project.short_description }}</p>
                     </div>
                 </a>
+                {# Etiqueta de categoría en la esquina superior derecha para visibilidad rápida, si existe #}
+                {% if project.category %}
+                    <span class="absolute top-3 right-3 bg-primary-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md z-10">
+                        {{ project.category.name }}
+                    </span>
+                {% endif %}
             </div>
             {% empty %}
-                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"> {# Mensaje de no proyectos #}
+                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"
+                     data-aos="fade-in" data-aos-duration="1000"> {# Animación para el mensaje de no proyectos #}
                     <p class="text-xl text-brand-dark font-semibold mb-3">No se encontraron proyectos en esta categoría.</p>
                     <p class="text-lg text-brand-gray">Prueba a seleccionar otra categoría o explora todos nuestros trabajos.</p>
                 </div>
             {% endfor %}
         </div>
 
-        <!-- Paginación -->
+        <!-- PAGINACIÓN: Estilos mejorados, responsiva y accesible -->
         {% if is_paginated %}
-        <div class="pagination flex justify-center items-center gap-4 mt-16 text-lg"> {# Centrado, con espaciado, margen superior #}
+        <div class="pagination flex justify-center items-center gap-4 mt-16 text-lg"
+             data-aos="fade-up" data-aos-duration="800" data-aos-delay="400"> {# Animación para la paginación #}
             {% if page_obj.has_previous %}
                 <a href="?page=1{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
-                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
-                   « primera
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50 active:scale-95"
+                   aria-label="Ir a la primera página">
+                   <span class="hidden sm:inline">« primera</span> <span class="inline sm:hidden">«</span> {# Texto completo en desktop, símbolo en mobile #}
                 </a>
                 <a href="?page={{ page_obj.previous_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
-                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
-                   anterior
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50 active:scale-95"
+                   aria-label="Ir a la página anterior">
+                   <span class="hidden sm:inline">anterior</span> <span class="inline sm:hidden">‹</span>
                 </a>
             {% endif %}
 
-            <span class="current px-4 py-2 font-semibold text-primary-700 bg-primary-100 rounded-lg shadow-inner"> {# Página actual destacada #}
+            <span class="current px-4 py-2 font-semibold text-primary-700 bg-primary-100 rounded-lg shadow-inner" aria-current="page">
                 Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
             </span>
 
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
-                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
-                   siguiente
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50 active:scale-95"
+                   aria-label="Ir a la página siguiente">
+                   <span class="hidden sm:inline">siguiente</span> <span class="inline sm:hidden">›</span>
                 </a>
                 <a href="?page={{ page_obj.paginator.num_pages }}{% if selected_categories %}&category={{ selected_categories|join:'&category=' }}{% endif %}"
-                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50">
-                   última »
+                   class="py-2 px-4 rounded-lg bg-white text-brand-dark shadow-sm hover:bg-brand-light-pink hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-gray/50 active:scale-95"
+                   aria-label="Ir a la última página">
+                   <span class="hidden sm:inline">última »</span> <span class="inline sm:hidden">»</span>
                 </a>
             {% endif %}
         </div>
@@ -89,4 +169,42 @@
     </div>
 </section>
 
+{% endblock %}
+
+{# BLOQUE: extra_js - Scripts JavaScript al final del body para no bloquear la renderización #}
+{% block extra_js %}
+    <!-- Incluir AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para efecto Parallax sutil en el Hero
+            const parallaxBg = document.querySelector('[data-parallax-speed]');
+            if (parallaxBg) {
+                const speed = parseFloat(parallaxBg.dataset.parallaxSpeed);
+                window.addEventListener('scroll', function() {
+                    const yOffset = window.pageYOffset;
+                    // Mover la imagen de fondo en la dirección opuesta al scroll
+                    parallaxBg.style.transform = `translateY(${yOffset * speed}px)`;
+                });
+            }
+
+            // Script para añadir retrasos escalonados (staggered delay) a las tarjetas de proyecto con AOS
+            // Selecciona todas las tarjetas de proyecto que tienen la clase 'project-card-item'
+            // Asegúrate de que esta clase esté presente en el div de la tarjeta de proyecto en el HTML
+            const projectCards = document.querySelectorAll('.project-card-item');
+            
+            projectCards.forEach((card, index) => {
+                // Calcula el retraso: índice * 100 milisegundos (ajusta 100 para un efecto más rápido/lento)
+                const delay = index * 100; 
+                // Establece el atributo data-aos-delay para cada tarjeta
+                card.setAttribute('data-aos-delay', delay);
+            });
+
+            // Inicializa AOS después de que todos los data-aos-delay han sido establecidos
+            AOS.init({
+                once: true, // Animaciones solo una vez por elemento
+                mirror: false, // Animaciones no se repiten al volver
+            });
+        });
+    </script>
 {% endblock %}

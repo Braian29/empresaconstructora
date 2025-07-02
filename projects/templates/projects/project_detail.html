@@ -3,39 +3,85 @@
 
 {% block title %}{{ project.title }} | Proyectos LE WORK Constructora{% endblock %}
 
+{# BLOQUE: extra_head - Añade CSS y precargas importantes para rendimiento y efectos #}
+{% block extra_head %}
+    <!-- Preconectar para Google Fonts para un mejor rendimiento de carga -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Precargar la fuente Oswald para evitar parpadeos (FOUT/FOIT) -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="preload" as="font" crossorigin>
+    <!-- Incluir AOS CSS para animaciones al hacer scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Definición de keyframes para animaciones sutiles del Hero */
+        @keyframes fadeInMoveUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInMoveUp 0.8s ease-out forwards;
+            opacity: 0; /* Asegura que el elemento esté oculto antes de que empiece la animación */
+        }
+        /* Clases de retraso para el hero text, aplicadas directamente */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        /* Estilos para el overlay de la imagen cuando se abre en una galería simple (si se implementara JS para ello) */
+        /* .img-modal-overlay { ... } */
+    </style>
+{% endblock %}
+
+
 {% block content %}
 
-    <!-- Hero Section para el Título del Proyecto -->
+    <!-- HERO SECTION: Mejorado para el Título del Proyecto con animaciones -->
     <section class="w-full py-20 md:py-24 bg-primary-700 text-white shadow-xl"> {# Fondo primario oscuro, padding generoso #}
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-oswald font-extrabold leading-tight tracking-tight drop-shadow-md">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-oswald font-extrabold leading-tight tracking-tight animate-fade-in-up">
                 {{ project.title }}
-            </h1> {# Título grande y audaz #}
+            </h1> {# Título grande y audaz con animación de entrada #}
         </div>
     </section>
 
-    <!-- Sección Principal de Contenido del Proyecto -->
+    <!-- SECCIÓN PRINCIPAL DE CONTENIDO DEL PROYECTO -->
     <section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
         <div class="container mx-auto px-4 lg:px-8">
-            <!-- Galería de Imágenes -->
-            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12"> {# Contenedor de la galería en una "card" #}
+
+            <!-- BREADCRUMBS: Para una mejor navegación y contextualización -->
+            <nav class="mb-8 text-brand-gray" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-2">
+                    {# CORRECCIÓN: Cambiado {% url 'home' %} por la ruta estática '/' para evitar NoReverseMatch #}
+                    <li><a href="/" class="hover:underline text-primary-500 transition-colors duration-200">Inicio</a></li>
+                    <li class="text-brand-gray">/</li>
+                    <li><a href="{% url 'projects:project_list' %}" class="hover:underline text-primary-500 transition-colors duration-200">Proyectos</a></li>
+                    <li class="text-brand-gray">/</li>
+                    <li aria-current="page" class="font-semibold text-brand-dark">{{ project.title }}</li>
+                </ol>
+            </nav>
+
+            <!-- GALERÍA DE IMÁGENES: Mejorada con animaciones al scroll y lazy loading -->
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12" data-aos="fade-up" data-aos-duration="900"> {# Contenedor de la galería en una "card" #}
                 <h2 class="text-2xl md:text-3xl font-oswald font-bold text-brand-dark text-center mb-8">Galería de Imágenes</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 justify-items-center"> {# Grid responsivo para imágenes #}
                     {% for image in project.images.all %}
-                        <div class="group w-full rounded-lg overflow-hidden shadow-md transform transition-transform duration-300 hover:scale-103 hover:shadow-lg hover:shadow-primary-300/50">
-                            <img src="{{ image.image.url }}" alt="{{ project.title }} - Imagen {{ forloop.counter }}" class="w-full h-60 md:h-72 object-cover object-center"> {# Imágenes de tamaño consistente, cubriendo el espacio #}
+                        {# Añadida clase 'gallery-image-item' para JavaScript y lazy loading #}
+                        <div class="gallery-image-item group w-full rounded-lg overflow-hidden shadow-md transform transition-transform duration-300 hover:scale-103 hover:shadow-lg hover:shadow-primary-300/50">
+                            <img src="{{ image.image.url }}" alt="{{ project.title }} - Imagen {{ forloop.counter }}"
+                                 class="w-full h-60 md:h-72 object-cover object-center"
+                                 loading="lazy"> {# Lazy loading para rendimiento #}
                         </div>
                     {% empty %}
-                        <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-lg shadow-inner">
+                        <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-lg shadow-inner" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
                             <p class="text-lg text-brand-dark font-medium mb-2">No hay imágenes disponibles para este proyecto.</p>
-                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available - Placeholder" class="w-full max-w-sm mx-auto h-48 object-cover rounded-lg">
+                            <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available - Placeholder" class="w-full max-w-sm mx-auto h-48 object-cover rounded-lg mt-4">
                         </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Información y Detalles del Proyecto -->
-            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12"> {# Contenedor de información en una "card" #}
+            <!-- INFORMACIÓN Y DETALLES DEL PROYECTO: Con iconos y tipografía mejorada -->
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12" data-aos="fade-up" data-aos-duration="900" data-aos-delay="100"> {# Contenedor de información en una "card" #}
                 <h2 class="text-2xl md:text-3xl font-oswald font-bold text-brand-dark text-center mb-8">Descripción del Proyecto</h2>
                 <p class="text-lg text-brand-dark leading-relaxed mb-10 text-center md:text-left">
                     {% if project.detailed_description %}{{ project.detailed_description|linebreaksbr }}{% else %}No hay descripción detallada para este proyecto.{% endif %}
@@ -44,40 +90,41 @@
                 <div class="project-details grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-lg text-brand-dark"> {# Grid responsivo para los detalles clave #}
                     {% if project.categories.all %}
                         <p>
-                            <strong class="font-bold text-primary-700 block mb-1">Categorías:</strong>
+                            <strong class="font-bold text-primary-700 block mb-1 flex items-center"><i class="fas fa-tags mr-2 text-primary-500"></i>Categorías:</strong>
                             <span class="text-brand-dark">{% for category in project.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                         </p>
                     {% endif %}
                     {% if project.service_type %}
                         <p>
-                            <strong class="font-bold text-primary-700 block mb-1">Tipo de Servicio:</strong>
+                            <strong class="font-bold text-primary-700 block mb-1 flex items-center"><i class="fas fa-tools mr-2 text-primary-500"></i>Tipo de Servicio:</strong>
                             <span class="text-brand-dark">{{ project.service_type }}</span>
                         </p>
                     {% endif %}
                     {% if project.duration %}
                         <p>
-                            <strong class="font-bold text-primary-700 block mb-1">Duración del Proyecto:</strong>
+                            <strong class="font-bold text-primary-700 block mb-1 flex items-center"><i class="fas fa-clock mr-2 text-primary-500"></i>Duración del Proyecto:</strong>
                             <span class="text-brand-dark">{{ project.duration }}</span>
                         </p>
                     {% endif %}
                     {% if project.location %}
                         <p>
-                            <strong class="font-bold text-primary-700 block mb-1">Ubicación:</strong>
+                            <strong class="font-bold text-primary-700 block mb-1 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-primary-500"></i>Ubicación:</strong>
                             <span class="text-brand-dark">{{ project.location }}</span>
                         </p>
                     {% endif %}
                     {% if project.client %}
                         <p>
-                            <strong class="font-bold text-primary-700 block mb-1">Cliente:</strong>
+                            <strong class="font-bold text-primary-700 block mb-1 flex items-center"><i class="fas fa-user-tie mr-2 text-primary-500"></i>Cliente:</strong>
                             <span class="text-brand-dark">{{ project.client }}</span>
                         </p>
                     {% endif %}
                 </div>
             </div>
 
-            <!-- Testimonio del Cliente (si existe) -->
+            <!-- TESTIMONIO DEL CLIENTE: Destacado visualmente con animación -->
             {% if project.client_testimonial_quote %}
-                <div class="bg-brand-light-pink p-8 md:p-10 rounded-xl shadow-lg border-l-4 border-primary-500 relative overflow-hidden"> {# Fondo rosa pálido, borde izquierdo, sombra #}
+                <div class="bg-brand-light-pink p-8 md:p-10 rounded-xl shadow-lg border-l-4 border-primary-500 relative overflow-hidden"
+                     data-aos="fade-up" data-aos-duration="900" data-aos-delay="200"> {# Fondo rosa pálido, borde izquierdo, sombra #}
                     <div class="absolute top-4 left-4 text-primary-300 text-6xl opacity-30 z-0">
                         <i class="fas fa-quote-left"></i> {# Icono de cita decorativo #}
                     </div>
@@ -90,13 +137,40 @@
                 </div>
             {% endif %}
 
-            <!-- Botón para ver otros proyectos -->
-            <div class="text-center mt-12">
-                <a href="{% url 'projects:project_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300">
+            <!-- BOTÓN PARA VER OTROS PROYECTOS: Con diseño CTA mejorado y animación -->
+            <div class="text-center mt-12" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="300">
+                <a href="{% url 'projects:project_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary-300">
                     Ver otros proyectos <i class="fas fa-long-arrow-alt-right ml-3"></i>
                 </a>
             </div>
         </div>
     </section>
 
+{% endblock %}
+
+{# BLOQUE: extra_js - Scripts JavaScript al final del body para no bloquear la renderización #}
+{% block extra_js %}
+    <!-- Incluir AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para añadir retrasos escalonados (staggered delay) a las imágenes de la galería con AOS
+            // Selecciona todas las imágenes de la galería que tienen la clase 'gallery-image-item'
+            const galleryImages = document.querySelectorAll('.gallery-image-item');
+            
+            galleryImages.forEach((item, index) => {
+                // Asegúrate de que el item tenga data-aos (ya lo tiene en el HTML)
+                // Calcula el retraso: índice * 100 milisegundos (ajusta 100 para un efecto más rápido/lento)
+                const delay = index * 100; 
+                // Establece el atributo data-aos-delay para cada item de la galería
+                item.setAttribute('data-aos-delay', delay);
+            });
+
+            // Inicializa AOS después de que todos los data-aos-delay han sido establecidos
+            AOS.init({
+                once: true, // Animaciones solo una vez por elemento al entrar en el viewport
+                mirror: false, // Las animaciones no se repiten si el usuario vuelve a hacer scroll hacia arriba
+            });
+        });
+    </script>
 {% endblock %}

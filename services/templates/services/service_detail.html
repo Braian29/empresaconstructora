@@ -3,26 +3,78 @@
 
 {% block title %}{{ service.title }} | Servicios LE WORK Constructora{% endblock %}
 
+{# BLOQUE: extra_head - Añade CSS y precargas importantes para rendimiento y efectos #}
+{% block extra_head %}
+    <!-- Preconectar para Google Fonts para un mejor rendimiento de carga -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Precargar la fuente Oswald para evitar parpadeos (FOUT/FOIT) -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="preload" as="font" crossorigin>
+    <!-- Incluir AOS CSS para animaciones al hacer scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Definición de keyframes para animaciones sutiles del Hero */
+        @keyframes fadeInMoveUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInMoveUp 0.8s ease-out forwards;
+            opacity: 0; /* Asegura que el elemento esté oculto antes de que empiece la animación */
+        }
+        /* Clases de retraso para el hero text, aplicadas directamente */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+{% endblock %}
+
+
 {% block content %}
 
-<!-- Hero Section para el Título del Servicio -->
-<section class="w-full py-20 md:py-24 bg-primary-700 text-white shadow-xl"> {# Fondo primario oscuro, padding generoso #}
-    <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-oswald font-extrabold leading-tight tracking-tight drop-shadow-md">
+<!-- HERO SECTION: Mejorado para el Título del Servicio con fondo dinámico y animaciones -->
+<section class="relative w-full py-20 md:py-24 bg-primary-700 text-white overflow-hidden shadow-xl"> {# Fondo primario oscuro, padding generoso #}
+    <!-- Capa de imagen de fondo con efecto parallax sutil -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out z-0"
+         style="background-image: url('{% static 'core/img/hero_service_detail_bg.jpg' %}');" {# Asume una imagen de fondo específica para el detalle del servicio #}
+         data-parallax-speed="0.2"> {# Data attribute para el script JS de parallax #}
+        <!-- Overlay oscuro para asegurar la legibilidad del texto blanco sobre la imagen -->
+        <div class="absolute inset-0 bg-primary-700 opacity-60"></div>
+    </div>
+    <!-- Contenido del Hero: Centrado y con animaciones de entrada -->
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-oswald font-extrabold leading-tight tracking-tight animate-fade-in-up">
             {{ service.title }}
-        </h1> {# Título grande y audaz #}
+        </h1> {# Título grande y audaz con animación de entrada #}
     </div>
 </section>
 
-<!-- Sección Principal de Contenido del Servicio -->
+<!-- SECCIÓN PRINCIPAL DE CONTENIDO DEL SERVICIO -->
 <section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
     <div class="container mx-auto px-4 lg:px-8">
-        <!-- Contenido Principal del Servicio -->
-        <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12"> {# Contenedor principal en una "card" #}
+
+        <!-- BREADCRUMBS: Para una mejor navegación y contextualización -->
+        <nav class="mb-8 text-brand-gray" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                {# CORRECCIÓN: Cambiado {% url 'home' %} por la ruta estática '/' #}
+                <li><a href="/" class="hover:underline text-primary-500 transition-colors duration-200">Inicio</a></li>
+                <li class="text-brand-gray">/</li>
+                <li><a href="{% url 'services:service_list' %}" class="hover:underline text-primary-500 transition-colors duration-200">Servicios</a></li>
+                <li class="text-brand-gray">/</li>
+                <li aria-current="page" class="font-semibold text-brand-dark">{{ service.title }}</li>
+            </ol>
+        </nav>
+
+        <!-- CONTENIDO PRINCIPAL DEL SERVICIO: Con animaciones y lazy loading -->
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl mb-12" data-aos="fade-up" data-aos-duration="900"> {# Contenedor principal en una "card" #}
             {% if service.image %}
-                <img src="{{ service.image.url }}" alt="{{ service.title }} - Imagen principal" class="w-full h-80 md:h-96 object-cover object-center rounded-lg shadow-md mb-8"> {# Imagen grande, responsiva, con sombra y redondeado #}
+                <img src="{{ service.image.url }}" alt="{{ service.title }} - Imagen principal"
+                     class="w-full h-80 md:h-96 object-cover object-center rounded-lg shadow-md mb-8"
+                     loading="lazy"> {# Lazy loading para rendimiento #}
             {% else %}
-                <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}" class="w-full h-80 md:h-96 object-cover object-center rounded-lg shadow-md mb-8">
+                <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}"
+                     class="w-full h-80 md:h-96 object-cover object-center rounded-lg shadow-md mb-8"
+                     loading="lazy">
             {% endif %}
 
             <h2 class="text-3xl md:text-4xl font-oswald font-bold text-brand-dark mb-6 text-center">Detalles del Servicio</h2> {# Título para la descripción #}
@@ -31,25 +83,41 @@
             </p>
         </div>
 
-        <!-- Proyectos Relacionados -->
-        <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl"> {# Contenedor de proyectos relacionados en una "card" #}
+        <!-- PROYECTOS RELACIONADOS: Con animaciones escalonadas y hover mejorado -->
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl" data-aos="fade-up" data-aos-duration="900" data-aos-delay="150"> {# Contenedor de proyectos relacionados en una "card" #}
             <h2 class="text-3xl md:text-4xl font-oswald font-bold text-brand-dark text-center mb-10">Proyectos Relacionados</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center"> {# Grid responsivo para proyectos #}
                 {% for project in related_projects %}
-                    <div class="group w-full max-w-sm bg-brand-light-pink rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary-300/50"> {# Card de proyecto con hover effect #}
+                    {# Añadida clase 'related-project-card-item' para JavaScript y lazy loading #}
+                    <div class="related-project-card-item group w-full max-w-sm bg-brand-light-pink rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary-300/50"
+                         data-aos="fade-up" data-aos-duration="800"> {# data-aos-delay se añadirá con JS #}
                         <a href="{% url 'projects:project_detail' project.slug %}" aria-label="Ver detalles de {{ project.title }}">
-                            {% if project.images.first %} {# Usa la primera imagen como miniatura #}
-                                <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen principal" class="w-full h-56 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"> {# Imagen con altura fija y zoom en hover #}
-                            {% else %}
-                                <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}" class="w-full h-56 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105">
-                            {% endif %}
+                            <div class="relative overflow-hidden">
+                                {% if project.images.first %} {# Usa la primera imagen como miniatura #}
+                                    <img src="{{ project.images.first.image.url }}" alt="{{ project.title }} - Imagen principal"
+                                         class="w-full h-56 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                         loading="lazy"> {# Lazy loading para rendimiento #}
+                                {% else %}
+                                    <img src="{% static 'core/img/project_placeholder.jpg' %}" alt="No image available for {{ project.title }}"
+                                         class="w-full h-56 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                         loading="lazy">
+                                {% endif %}
+                                {# Overlay de color y icono de "ver" que aparecen en hover, indicando interactividad #}
+                                <div class="absolute inset-0 bg-primary-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 flex items-center justify-center">
+                                    <svg class="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
                             <div class="p-6"> {# Padding para el contenido #}
                                 <h3 class="text-xl font-oswald font-semibold text-brand-dark mb-2">{{ project.title }}</h3>
                             </div>
                         </a>
                     </div>
                 {% empty %}
-                    <div class="col-span-full text-center p-8 bg-brand-light-blue-gray rounded-xl shadow-inner border border-brand-gray/30"> {# Mensaje de no proyectos #}
+                    <div class="col-span-full text-center p-8 bg-brand-light-blue-gray rounded-xl shadow-inner border border-brand-gray/30"
+                         data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200"> {# Animación para el mensaje de no proyectos #}
                         <p class="text-xl text-brand-dark font-semibold mb-3">No hay proyectos relacionados con este servicio aún.</p>
                         <p class="text-lg text-brand-gray">¡Estamos construyendo más! Vuelve pronto para ver nuestras últimas obras.</p>
                     </div>
@@ -57,16 +125,53 @@
             </div>
         </div>
 
-        <!-- Botones de Acción -->
-        <div class="flex flex-col sm:flex-row justify-center gap-6 mt-12"> {# Flexbox responsivo para botones, con espaciado #}
-            <a href="{% url 'services:service_list' %}" class="inline-flex items-center justify-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300">
+        <!-- BOTONES DE ACCIÓN: Con diseño CTA mejorado y animaciones -->
+        <div class="flex flex-col sm:flex-row justify-center gap-6 mt-12" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="300"> {# Flexbox responsivo para botones, con espaciado #}
+            <a href="{% url 'services:service_list' %}" class="inline-flex items-center justify-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary-300">
                 <i class="fas fa-arrow-left mr-2"></i> Volver a Servicios
             </a>
-            <a href="{% url 'core:contact' %}" class="inline-flex items-center justify-center py-4 px-10 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300">
+            <a href="{% url 'core:contact' %}" class="inline-flex items-center justify-center py-4 px-10 border-2 border-primary-500 text-primary-600 font-bold rounded-lg shadow-md hover:bg-primary-500 hover:text-white transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary-300">
                 Solicitar Presupuesto <i class="fas fa-clipboard-list ml-2"></i> {# Icono para solicitar presupuesto #}
             </a>
         </div>
     </div>
 </section>
 
+{% endblock %}
+
+{# BLOQUE: extra_js - Scripts JavaScript al final del body para no bloquear la renderización #}
+{% block extra_js %}
+    <!-- Incluir AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para efecto Parallax sutil en el Hero
+            const parallaxBg = document.querySelector('[data-parallax-speed]');
+            if (parallaxBg) {
+                const speed = parseFloat(parallaxBg.dataset.parallaxSpeed);
+                window.addEventListener('scroll', function() {
+                    const yOffset = window.pageYOffset;
+                    // Mover la imagen de fondo en la dirección opuesta al scroll
+                    parallaxBg.style.transform = `translateY(${yOffset * speed}px)`;
+                });
+            }
+
+            // Script para añadir retrasos escalonados (staggered delay) a las tarjetas de proyectos relacionados con AOS
+            // Selecciona todas las tarjetas de proyecto que tienen la clase 'related-project-card-item'
+            const relatedProjectCards = document.querySelectorAll('.related-project-card-item');
+            
+            relatedProjectCards.forEach((card, index) => {
+                // Calcula el retraso: índice * 100 milisegundos (ajusta 100 para un efecto más rápido/lento)
+                const delay = index * 100; 
+                // Establece el atributo data-aos-delay para cada tarjeta
+                card.setAttribute('data-aos-delay', delay);
+            });
+
+            // Inicializa AOS después de que todos los data-aos-delay han sido establecidos
+            AOS.init({
+                once: true, // Animaciones solo una vez por elemento
+                mirror: false, // Animaciones no se repiten al volver
+            });
+        });
+    </script>
 {% endblock %}

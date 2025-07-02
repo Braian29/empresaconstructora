@@ -3,45 +3,112 @@
 
 {% block title %}Servicios | LE WORK Constructora{% endblock %}
 
+{# BLOQUE: extra_head - Añade CSS y precargas importantes para rendimiento y efectos #}
+{% block extra_head %}
+    <!-- Preconectar para Google Fonts para un mejor rendimiento de carga -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Precargar la fuente Oswald para evitar parpadeos (FOUT/FOIT) -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="preload" as="font" crossorigin>
+    <!-- Incluir AOS CSS para animaciones al hacer scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Definición de keyframes para animaciones sutiles del Hero */
+        @keyframes fadeInMoveUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInMoveUp 0.8s ease-out forwards;
+            opacity: 0; /* Asegura que el elemento esté oculto antes de que empiece la animación */
+        }
+        /* Clases de retraso para el hero text, aplicadas directamente */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+{% endblock %}
+
+
 {% block content %}
 
-<!-- Hero Section para la Página de Servicios -->
-<section class="w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white shadow-xl"> {# Fondo oscuro para impacto, altura responsiva #}
-    <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 drop-shadow-md">Lo que Construimos para Ti</h1>
-        <p class="text-lg md:text-xl font-light drop-shadow-sm max-w-2xl mx-auto">Descubre la gama completa de servicios especializados que ofrecemos en LE WORK Constructora para hacer realidad tus proyectos.</p> {# Subtítulo descriptivo #}
+<!-- HERO SECTION: Mejorado con fondo dinámico, overlay y animaciones de texto -->
+<section class="relative w-full h-72 md:h-96 flex items-center justify-center bg-brand-dark text-white overflow-hidden shadow-xl">
+    <!-- Capa de imagen de fondo con efecto parallax sutil -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out z-0"
+         style="background-image: url('{% static 'core/img/hero_services_bg.jpg' %}');" {# Asume una imagen de fondo específica para servicios #}
+         data-parallax-speed="0.2"> {# Data attribute para el script JS de parallax #}
+        <!-- Overlay oscuro para asegurar la legibilidad del texto blanco sobre la imagen -->
+        <div class="absolute inset-0 bg-brand-dark opacity-60"></div>
+    </div>
+    <!-- Contenido del Hero: Centrado y con animaciones de entrada escalonadas -->
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <h1 class="text-4xl md:text-6xl font-oswald font-extrabold leading-tight tracking-tight mb-4 animate-fade-in-up">
+            Lo que Construimos para Ti
+        </h1>
+        <p class="text-lg md:text-xl font-light max-w-2xl mx-auto animate-fade-in-up delay-200">
+            Descubre la gama completa de servicios especializados que ofrecemos en LE WORK Constructora para hacer realidad tus proyectos.
+        </p>
     </div>
 </section>
 
-<!-- Sección Principal de Lista de Servicios -->
-<section class="py-16 md:py-20 bg-brand-light-blue-gray"> {# Fondo gris azulado claro #}
+<!-- SECCIÓN PRINCIPAL DE LISTA DE SERVICIOS -->
+<section class="py-16 md:py-20 bg-brand-light-blue-gray">
     <div class="container mx-auto px-4 lg:px-8">
-        <!-- Opciones de Filtro -->
-        <div class="filter-options flex flex-wrap justify-center gap-4 mb-12 p-4 bg-white rounded-xl shadow-lg"> {# Contenedor de filtros con fondo, redondeado y sombra #}
-            <a href="{% url 'services:service_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
-                {% if not selected_category %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
-                focus:outline-none focus:ring-2 focus:ring-primary-300">
-                Todos
-            </a>
-            {% for category in categories %}
-                <a href="{% url 'services:service_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
-                    {% if selected_category == category.name %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
-                    focus:outline-none focus:ring-2 focus:ring-primary-300">
-                    {{ category.name }}
+
+        <!-- BREADCRUMBS: Para una mejor navegación y contextualización del usuario -->
+        <nav class="mb-8 text-brand-gray" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                {# CORRECCIÓN: Usando la ruta estática '/' para el enlace a Inicio #}
+                <li><a href="/" class="hover:underline text-primary-500 transition-colors duration-200">Inicio</a></li>
+                <li class="text-brand-gray">/</li>
+                <li aria-current="page" class="font-semibold text-brand-dark">Servicios</li>
+            </ol>
+        </nav>
+
+        <!-- OPCIONES DE FILTRO: Mejoradas con posición sticky y microinteracciones -->
+        <div class="sticky top-0 z-40 bg-brand-light-blue-gray py-4 md:py-6 -mx-4 md:-mx-8 lg:px-0"> {# Margen negativo para extender el fondo, padding para el contenido #}
+            <div class="container mx-auto px-4 lg:px-8 filter-options flex flex-wrap justify-center gap-4 p-4 bg-white rounded-xl shadow-lg">
+                <a href="{% url 'services:service_list' %}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                    {% if not selected_category %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                    focus:outline-none focus:ring-2 focus:ring-primary-300 active:scale-95"> {# Añadido active:scale-95 para microinteracción #}
+                    Todos
                 </a>
-            {% endfor %}
+                {% for category in categories %}
+                    <a href="{% url 'services:service_list' %}?category={{ category.name }}" class="filter-button py-2 px-6 rounded-full font-semibold transition-all duration-300
+                        {% if selected_category == category.name %}bg-primary-500 text-white shadow-md{% else %}bg-brand-light-pink text-brand-dark hover:bg-primary-100 hover:text-primary-700{% endif %}
+                        focus:outline-none focus:ring-2 focus:ring-primary-300 active:scale-95">
+                        {{ category.name }}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- Cuadrícula de Servicios -->
-        <div class="service-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center"> {# Grid responsivo #}
+        <!-- CUADRÍCULA DE SERVICIOS: Con animaciones al scroll, mejoras en tarjetas y lazy loading -->
+        <div class="service-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 justify-items-center mt-12">
             {% for service in services %}
-                <div class="group w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"> {# Card de servicio con hover effect #}
+                {# Añadida clase 'service-card-item' para que JavaScript pueda seleccionarlas #}
+                {# 'data-aos-delay' se establecerá dinámicamente con JavaScript #}
+                <div class="service-card-item group w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-300/50"
+                     data-aos="fade-up" data-aos-duration="800"> {# data-aos-delay se añadirá con JS #}
                     <a href="{% url 'services:service_detail' service.slug %}" aria-label="Ver detalles del servicio: {{ service.title }}">
-                        {% if service.image %}
-                            <img src="{{ service.image.url }}" alt="{{ service.title }} - Imagen del servicio" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"> {# Imagen con altura fija y zoom en hover #}
-                        {% else %}
-                            <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}" class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105">
-                        {% endif %}
+                        <div class="relative overflow-hidden">
+                            {% if service.image %}
+                                <img src="{{ service.image.url }}" alt="{{ service.title }} - Imagen del servicio"
+                                     class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                     loading="lazy"> {# Lazy loading para rendimiento #}
+                            {% else %}
+                                <img src="{% static 'core/img/service_placeholder.jpg' %}" alt="No image available for {{ service.title }}"
+                                     class="w-full h-60 object-cover object-center rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                     loading="lazy">
+                            {% endif %}
+                            {# Overlay de color y icono de "ver" que aparecen en hover, indicando interactividad #}
+                            <div class="absolute inset-0 bg-primary-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 flex items-center justify-center">
+                                <svg class="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </div>
+                        </div>
                         <div class="p-6"> {# Padding para el contenido #}
                             <h2 class="text-xl font-oswald font-semibold text-brand-dark mb-2">{{ service.title }}</h2>
                             <p class="text-brand-gray text-sm">{{ service.short_description }}</p>
@@ -54,7 +121,8 @@
                     </a>
                 </div>
             {% empty %}
-                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"> {# Mensaje de no servicios #}
+                <div class="col-span-full text-center p-8 bg-brand-light-pink rounded-xl shadow-inner border border-brand-gray/30"
+                     data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200"> {# Animación para el mensaje de no servicios #}
                     <p class="text-xl text-brand-dark font-semibold mb-3">No se encontraron servicios en esta categoría.</p>
                     <p class="text-lg text-brand-gray">Prueba a seleccionar otra categoría o explora todas las opciones disponibles.</p>
                 </div>
@@ -65,3 +133,40 @@
 </section>
 
 {% endblock content %}
+
+{# BLOQUE: extra_js - Scripts JavaScript al final del body para no bloquear la renderización #}
+{% block extra_js %}
+    <!-- Incluir AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para efecto Parallax sutil en el Hero
+            const parallaxBg = document.querySelector('[data-parallax-speed]');
+            if (parallaxBg) {
+                const speed = parseFloat(parallaxBg.dataset.parallaxSpeed);
+                window.addEventListener('scroll', function() {
+                    const yOffset = window.pageYOffset;
+                    // Mover la imagen de fondo en la dirección opuesta al scroll
+                    parallaxBg.style.transform = `translateY(${yOffset * speed}px)`;
+                });
+            }
+
+            // Script para añadir retrasos escalonados (staggered delay) a las tarjetas de servicio con AOS
+            // Selecciona todas las tarjetas de servicio que tienen la clase 'service-card-item'
+            const serviceCards = document.querySelectorAll('.service-card-item');
+            
+            serviceCards.forEach((card, index) => {
+                // Calcula el retraso: índice * 100 milisegundos (ajusta 100 para un efecto más rápido/lento)
+                const delay = index * 100; 
+                // Establece el atributo data-aos-delay para cada tarjeta
+                card.setAttribute('data-aos-delay', delay);
+            });
+
+            // Inicializa AOS después de que todos los data-aos-delay han sido establecidos
+            AOS.init({
+                once: true, // Animaciones solo una vez por elemento
+                mirror: false, // Animaciones no se repiten al volver
+            });
+        });
+    </script>
+{% endblock %}
