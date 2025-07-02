@@ -1,35 +1,166 @@
-<!-- Sección de Servicios Destacados -->
-<section class="py-20 bg-white animate-on-scroll">
-    <div class="container mx-auto px-6 lg:px-8">
-        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-7 leading-tight tracking-tight">Nuestros Servicios Principales</h2>
-        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">Explora las áreas en las que somos expertos y descubre cómo podemos ayudarte a construir tus sueños, desde la concepción hasta la entrega.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
-            {% for service_category in featured_services %}
-                <div class="group w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary-300/50 animate-on-scroll">
-                    <div class="p-8 text-center">
-                        {% if service_category.icon %}
-                            <img src="{{ service_category.icon.url }}" alt="Icono de la categoría de servicio: {{ service_category.name }}" class="w-20 h-20 mx-auto mb-5 text-primary-500 transition-transform duration-300 group-hover:scale-110" loading="lazy">
-                        {% else %}
-                            <i class="fas fa-cogs text-6xl text-primary-500 mb-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true"></i>
-                        {% endif %}
-                        <h4 class="text-2xl font-oswald font-semibold text-neutral-dark mb-3">{{ service_category.name }}</h4>
-                        <p class="text-neutral-gray text-base mb-6">{{ service_category.description|truncatewords:25 }}</p>
-                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition-transform duration-300 group-hover:translate-x-1" aria-label="Ver todos los servicios de la categoría {{ service_category.name }}">
-                            Ver Servicios <i class="fas fa-long-arrow-alt-right ml-2.5 text-base"></i>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LE WORK Constructora - Nuestros Servicios Principales</title>
+
+    <!-- Link a Font Awesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlgk/F/W+M/M+h2jP4nNfG+5X+jK/Pj8+v2N5+X/CjN+0/t/yJ+v+g+v3J+v+w+9/j+PjP4jN+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Links a Google Fonts (Oswald ya lo usas, Roboto Slab y Raleway del ejemplo de las cards) -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Slab:wght@400;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tu archivo CSS compilado de Tailwind CSS -->
+    <!-- ¡IMPORTANTE!: Asegúrate de que esta ruta sea correcta para tu proyecto -->
+    <link href="/path/to/your/tailwind.css" rel="stylesheet">
+
+    <!-- Estilos personalizados para las animaciones y el fallback de la imagen de la tarjeta -->
+    <style>
+        /* Estilo inicial para los elementos que deben animarse */
+        .animate-on-scroll-initial {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* Estilo final cuando el elemento está en la vista (activo) */
+        .animate-on-scroll-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Imagen de fallback para las tarjetas si no se proporciona un icono de servicio */
+        .card-placeholder-image {
+            background-image: url('https://via.placeholder.com/600x400?text=Imagen+no+disponible'); /* Puedes cambiar esta URL */
+            background-color: #f0f0f0; /* Fondo si la imagen de placeholder tampoco carga */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sección de Servicios Destacados -->
+    <section id="servicios-principales" class="py-20 bg-white">
+        <div class="container mx-auto px-6 lg:px-8">
+            <!-- Título principal - Animado -->
+            <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark text-center mb-8 leading-tight tracking-tight animate-on-scroll-initial">Nuestros Servicios Principales</h2>
+            <!-- Descripción principal - Animada -->
+            <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto animate-on-scroll-initial">Explora las áreas en las que somos expertos y descubre cómo podemos ayudarte a construir tus sueños, desde la concepción hasta la entrega.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+                {% for service_category in featured_services %}
+                    <!-- Tarjeta de Servicio individual - Animada -->
+                    <div class="group w-full max-w-md bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-400 ease-out relative 
+                                hover:shadow-2xl hover:scale-105 animate-on-scroll-initial">
+                        
+                        <!-- Área de la imagen de la tarjeta y sus efectos de hover -->
+                        <div class="relative h-60 rounded-t-xl overflow-hidden">
+                            <!-- La imagen de fondo real del servicio o el placeholder -->
+                            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-110
+                                        {% if not service_category.icon %} card-placeholder-image {% endif %}" 
+                                style="{% if service_category.icon %} background-image: url('{{ service_category.icon.url }}'); {% endif %}">
+                            </div>
+                            
+                            <!-- Overlay oscuro que aparece en hover sobre la imagen -->
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                            <!-- Contenido flotante (como iconos de 'me gusta' o 'tiempo') que aparece en hover -->
+                            <!-- Elimina este div si no necesitas estos elementos en tus cards de servicio -->
+                            <div class="absolute inset-x-0 top-0 p-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                                <!-- Icono de 'Like' (ejemplo) - Puedes reemplazarlo por un icono Font Awesome o eliminarlo -->
+                                <svg class="w-5 h-5 fill-white/80 hover:fill-red-500 transition-colors cursor-pointer" viewBox="0 0 24 24">
+                                    <path d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z" />
+                                </svg>
+                                <!-- Información de 'Tiempo' o duración (ejemplo) - Puedes reemplazarla o eliminarla -->
+                                <div class="flex items-center text-white/80 text-sm">
+                                    <svg class="w-4 h-4 mr-1 fill-white/80" viewBox="0 0 24 24">
+                                        <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+                                    </svg>
+                                    <span>XX min</span> {# Reemplaza XX min con datos reales si aplica #}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sección de información principal de la tarjeta (siempre visible) -->
+                        <div class="p-6 bg-white rounded-b-xl relative z-20">
+                            <!-- Categoría (ej. "Servicio") -->
+                            <!-- Puedes usar font-raleway o font-roboto-slab si los configuraste en tailwind.config.js -->
+                            <span class="text-xs font-medium uppercase tracking-widest text-gray-700 mb-1 block">
+                                Servicio
+                            </span>
+                            <!-- Título del servicio -->
+                            <h3 class="text-2xl font-oswald font-semibold text-neutral-dark mb-2 leading-tight">{{ service_category.name }}</h3>
+                            <!-- Descripción del servicio - truncada a 20 palabras -->
+                            <p class="text-neutral-gray text-sm mb-4">{{ service_category.description|truncatewords:20 }}</p>
+                            
+                            <!-- Enlace "Ver Servicios" dentro de la tarjeta -->
+                            <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" 
+                               class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium 
+                                      transition-transform duration-300 group-hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-primary-300" 
+                               aria-label="Ver todos los servicios de la categoría {{ service_category.name }}">
+                                Ver Servicios 
+                                <i class="fas fa-long-arrow-alt-right ml-3 text-base"></i>
+                            </a>
+                        </div>
+                        
+                        <!-- Enlace absoluto para hacer toda la tarjeta clicable -->
+                        <a href="{% url 'services:service_list' %}?category={{ service_category.name }}" 
+                           class="absolute inset-0 z-10" 
+                           aria-label="Ver detalles de la categoría {{ service_category.name }}"
+                           title="Ver detalles de {{ service_category.name }}">
                         </a>
                     </div>
-                </div>
-            {% empty %}
-                <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll">
-                    <p class="text-xl text-neutral-dark font-semibold mb-3">No hay categorías de servicios destacadas disponibles en este momento.</p>
-                    <p class="text-lg text-neutral-gray">Por favor, inténtelo de nuevo más tarde o póngase en contacto con nosotros.</p>
-                </div>
-            {% endfor %}
+                {% empty %}
+                    <!-- Mensaje si no hay categorías de servicios destacadas - Animado -->
+                    <div class="col-span-full text-center p-10 bg-neutral-light rounded-xl shadow-inner border border-neutral-gray/30 animate-on-scroll-initial">
+                        <i class="fas fa-box-open text-6xl text-neutral-gray mb-4" aria-hidden="true"></i>
+                        <p class="text-xl text-neutral-dark font-semibold mb-3">¡Aún estamos preparando nuestros servicios!</p>
+                        <p class="text-lg text-neutral-gray">Disculpa las molestias. Pronto tendremos nuestras categorías destacadas disponibles. Vuelve a visitarnos pronto o <a href="{% url 'contact' %}" class="text-primary-600 hover:underline">contáctanos</a> para más información.</p>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Botón principal "Ver todos los Servicios" - Animado -->
+            <div class="text-center mt-16 animate-on-scroll-initial">
+                <a href="{% url 'services:service_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los servicios que LE WORK Constructora ofrece">
+                    Ver todos los Servicios <i class="fas fa-long-arrow-alt-right ml-3"></i>
+                </a>
+            </div>
         </div>
-        <div class="text-center mt-16">
-            <a href="{% url 'services:service_list' %}" class="inline-flex items-center py-4 px-10 bg-primary-500 text-white font-bold rounded-lg shadow-lg hover:bg-primary-600 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300" aria-label="Explorar todos los servicios que LE WORK Constructora ofrece">
-                Ver todos los Servicios <i class="fas fa-long-arrow-alt-right ml-3"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
+
+    <!-- JavaScript para la animación al hacer scroll (Intersection Observer) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Selecciona todos los elementos con la clase inicial de animación
+            const animateOnScrollElements = document.querySelectorAll(".animate-on-scroll-initial");
+
+            // Opciones para el Intersection Observer
+            const observerOptions = {
+                root: null, // El viewport es el elemento raíz
+                rootMargin: "0px", // Sin margen adicional
+                threshold: 0.1 // El 10% del elemento debe ser visible para activar la animación
+            };
+
+            // Callback que se ejecuta cuando un elemento cruza el umbral de visibilidad
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Si el elemento está en la vista, remueve la clase inicial y añade la clase activa
+                        entry.target.classList.remove("animate-on-scroll-initial");
+                        entry.target.classList.add("animate-on-scroll-active");
+                        // Deja de observar el elemento una vez que se ha animado
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Observa cada elemento seleccionado
+            animateOnScrollElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>
