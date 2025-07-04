@@ -1,0 +1,31 @@
+<!-- core/templates/core/home_sections_proveedores.html -->
+
+{% if proveedores_destacados %}
+<section class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6 lg:px-8 text-center">
+        <h2 class="text-4xl md:text-5xl font-oswald font-extrabold text-neutral-dark mb-7 leading-tight tracking-tight">
+            Nuestros Proveedores de Confianza
+        </h2>
+        <p class="text-center text-xl text-neutral-gray mb-16 max-w-4xl mx-auto">
+            Colaboramos con los mejores para garantizar la máxima calidad en cada proyecto.
+        </p>
+        
+        <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 lg:gap-x-16">
+            {% for proveedor in proveedores_destacados %}
+                <div class="flex-shrink-0">
+                    <a href="{{ proveedor.website|default:'#' }}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       title="{{ proveedor.name }}"
+                       class="block transition duration-300 ease-in-out transform hover:scale-110">
+                        <img src="{{ proveedor.logo.url }}" 
+                             alt="Logo de {{ proveedor.name }}" 
+                             class="h-16 md:h-20 max-w-xs object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100"
+                             loading="lazy">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

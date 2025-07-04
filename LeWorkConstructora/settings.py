@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'projects',
     'services',
     'about',
+    'proveedores',
 
     # Terceros
     'django_extensions',

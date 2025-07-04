@@ -2,7 +2,8 @@ from django.shortcuts import render
 from .models import Project, ProjectCategory
 from services.models import ServiceCategory
 from about.models import AboutUs, Value
-from projects.models import ProjectImage # Import the ProjectImage model
+from projects.models import ProjectImage 
+from proveedores.models import Proveedor 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -11,6 +12,8 @@ def home(request):
     featured_services = ServiceCategory.objects.all()[:3]
     about_us_snippet = AboutUs.objects.first()
     values = Value.objects.all()
+    # 2. OBTÉN LOS PROVEEDORES DESTACADOS
+    proveedores_destacados = Proveedor.objects.filter(is_featured=True)
 
     # Fetch images and videos for the carousel.  This example assumes you have a main image marked for projects.
     hero_carousel_items = []
@@ -25,11 +28,10 @@ def home(request):
         'about_us_snippet': about_us_snippet,
         'values': values,
         'carousel_items': hero_carousel_items, # Correct the key name
+        'proveedores_destacados': proveedores_destacados, # <-- 3. AÑADE AL CONTEXTO
     }
 
     return render(request, 'core/home.html', context)
-
-
 
 
 def project_list(request):
